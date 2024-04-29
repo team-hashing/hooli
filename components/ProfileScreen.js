@@ -1,19 +1,22 @@
 //create an empty ProfileScreen component
-import React, { useContext } from 'react';
+import React from 'react';
 import { View, Text, Button } from 'react-native';
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth } from "firebase/auth";
+import { handleSignOut } from '../businessLogic/user/authSignOut';
 
 
 
 const ProfileScreen = () => {
     const auth = getAuth();
     const user = auth.currentUser;
-    console.log(user);
+    
     return (
         <View>
-        <Text>Profile</Text>
-        <Text>Name: {user.displayName} </Text>
-        <Text>Email: {user.email} </Text>
+            <Text>Profile</Text>
+            <Text>Name: {user.displayName} </Text>
+            <Text>Email: {user.email} </Text>
+
+            <Button title="Sign Out" onPress={handleSignOut} />
         </View>
     );
 };

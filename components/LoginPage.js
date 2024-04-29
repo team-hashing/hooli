@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, TextInput, View } from 'react-native';
-import { authLoginPassword } from '../businessLogic/authLoginPassword';
+import { authLoginPassword } from '../businessLogic/user/authLoginPassword';
 
 const SignupPage = () => {
   const [email, setEmail] = useState('');

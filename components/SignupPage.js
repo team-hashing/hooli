@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, TextInput, View } from 'react-native';
 import { getAuth, updateProfile } from 'firebase/auth';
-import { authSignupPassword } from '../businessLogic/authSignupPassword';
+import { authSignupPassword } from '../businessLogic/user/authSignupPassword';
 
 const SignupPage = () => {
   const [email, setEmail] = useState('');
