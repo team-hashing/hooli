@@ -1,41 +1,29 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-
-import { createStackNavigator } from '@react-navigation/stack';
 import { auth } from './firebaseConfig';
 import { onAuthStateChanged } from 'firebase/auth';
 
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-import AuthChoicePage from './components/AuthChoicePage';
-import SignupPage from './components/SignupPage';
-import LoginPage from './components/LoginPage';
 import BottomTabNavigator from './components/BottomTabNavigator';
+import AuthStack from './components/AuthStack'; // Importing AuthStack from its own file
 
-const Stack = createStackNavigator();
+// Creating a context for authentication
 export const AuthContext = createContext({ user: null, isLoggedIn: false });
 
-const Tab = createBottomTabNavigator();
-
-const AuthStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen name="Authenticate" component={AuthChoicePage} />
-    <Stack.Screen name="Login" component={LoginPage} />
-    <Stack.Screen name="Signup" component={SignupPage} />
-  </Stack.Navigator>
-);
-
-
 const App = () => {
+  // State variables for user and login status
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   
+  // Effect hook to handle authentication state changes
   useEffect(() => {
+    // Subscribe to auth state changes
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
+        // If user is logged in, update state
         setIsLoggedIn(true);
         setUser(user);
       } else {
+        // If user is logged out, update state
         setIsLoggedIn(false);
         setUser(null);
       }
@@ -46,8 +34,10 @@ const App = () => {
   }, []);
 
   return (
+    // Provide auth context to children
     <AuthContext.Provider value={{ user, isLoggedIn }}>
       <NavigationContainer>
+        {/* Render different navigators based on auth state */}
         {isLoggedIn ? <BottomTabNavigator /> : <AuthStack />}
       </NavigationContainer>
     </AuthContext.Provider>
