@@ -1,24 +1,66 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
+import { View, TextInput, Button, Alert, ActivityIndicator, Text } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
-const MealsScreen = () => {
-  const [userInput, setUserInput] = useState('');
+export default function MealsScreen() {
+  const [text, setText] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState(null);
 
-  const handleInputChange = (text) => {
-    setUserInput(text);
+
+  const generateContent = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`http:/192.168.1.144:3000/generate?text=${encodeURIComponent(text)}`);
+      const data = await response.json(); 
+      setData(data);
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <View>
-      <Text>Enter your dietary restrictions:</Text>
       <TextInput
-        value={userInput}
-        onChangeText={handleInputChange}
-        placeholder="e.g., vegan, gluten-free"
+        value={text}
+        onChangeText={setText}
+        placeholder="Enter text"
+        multiline
+        numberOfLines={4}
+        style={{height: 100}}
       />
-      <Button title="Find Meal Plans" onPress={() => {}} />
+      <Button
+        title="Generate"
+        onPress={generateContent}
+        disabled={loading}
+      />
+      {loading && <ActivityIndicator size="large" color="#0000ff" />}
+      {data && (
+        <View>
+          <Text>{data.message}</Text>
+          {data && data.activities && (
+          data.activities.map((activity, index) => (
+            <TouchableOpacity key={index}>
+              <Text>{activity.activity}</Text>
+              <Text>{activity.activity_description}</Text>
+              <Text>{activity.feedback_message}</Text>
+              <Text>{activity.eco_friendly ? 'Eco-friendly' : 'Not eco-friendly'}</Text>
+            </TouchableOpacity>
+          ))
+        )}
+        {data && data.future_challenges && (
+          data.future_challenges.map((challenge, index) => (
+            <TouchableOpacity key={index}>
+              <Text>{challenge.challenge}</Text>
+              <Text>{challenge.challenge_description}</Text>
+              <Text>Difficulty: {challenge.challenge_dificulty}</Text>
+            </TouchableOpacity>
+          ))
+        )}
+        </View>
+      )}
     </View>
   );
-};
-
-export default MealsScreen;
+}
