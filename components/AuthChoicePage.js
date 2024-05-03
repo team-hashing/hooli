@@ -1,22 +1,39 @@
 import React from 'react';
-import { Button, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Button, Layout, Text } from '@ui-kitten/components';
+import { StyleSheet } from 'react-native';
 
 const AuthChoicePage = () => {
   const navigation = useNavigation();
 
   return (
-    <View>
+    <Layout style={styles.container}>
       <Button
-        title="Log In"
+        style={styles.button}
         onPress={() => navigation.navigate('Login')}
-      />
+      >
+        Log In
+      </Button>
       <Button
-        title="Sign Up"
+        style={styles.button}
         onPress={() => navigation.navigate('Signup')}
-      />
-    </View>
+      >
+        Sign Up
+      </Button>
+    </Layout>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  button: {
+    marginVertical: 10,
+    width: '80%',
+  },
+});
 
 export default AuthChoicePage;

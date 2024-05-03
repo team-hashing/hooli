@@ -11,10 +11,21 @@ const Stack = createStackNavigator();
 
 // Component for authentication-related screens
 const AuthStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen name="Authenticate" component={AuthChoicePage} />
-    <Stack.Screen name="Login" component={LoginPage} />
-    <Stack.Screen name="Signup" component={SignupPage} />
+  <Stack.Navigator options={{
+    headerTransparent: true
+  }}>
+    <Stack.Screen name="Authenticate" component={AuthChoicePage} options={{
+    headerShown: false
+  }}/>
+    <Stack.Screen name="Login" component={LoginPage} options={{
+    headerTransparent: true,
+    headerStyle: {
+      color: 'white'
+    }
+  }} />
+    <Stack.Screen name="Signup" component={SignupPage} options={{
+    headerTransparent: true
+  }}/>
   </Stack.Navigator>
 );
 

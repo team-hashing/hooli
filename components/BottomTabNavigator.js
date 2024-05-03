@@ -1,10 +1,10 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome6 } from '@expo/vector-icons';
-import ProfileScreen from './ProfileScreen';
 import MealsScreen from './MealsScreen';
 import TrainingScreen from './TrainingScreen';
 import PsychologyScreen from './PsychologyScreen';
+import ProfileStack from './ProfileStack';
 
 const Tab = createBottomTabNavigator();
 
@@ -15,7 +15,7 @@ const BottomTabNavigator = () => {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
-          if (route.name === 'Profile') {
+          if (route.name === 'ProfileStack') {
             iconName = focused ? 'circle-user' : 'circle-user';
           } else if (route.name === 'Meals') {
             iconName = focused ? 'bowl-food' : 'bowl-food';
@@ -34,7 +34,7 @@ const BottomTabNavigator = () => {
       <Tab.Screen name="Meals" component={MealsScreen} />
       <Tab.Screen name="Training" component={TrainingScreen} />
       <Tab.Screen name="Psychology" component={PsychologyScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="ProfileStack" component={ProfileStack} options={{ headerShown: false }}/>
     </Tab.Navigator>
   );
 };
