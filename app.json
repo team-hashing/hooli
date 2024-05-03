@@ -33,7 +33,12 @@
     },
     "plugins": [
       "@react-native-voice/voice"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "3c26ce12-d4eb-4d48-8d31-b917489393f3"
+      }
+    }
   },
   "ios": {
     "supportsTablet": true,

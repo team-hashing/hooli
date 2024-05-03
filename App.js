@@ -17,7 +17,7 @@ const App = () => {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 	// Effect hook to handle authentication state changes
-	/*
+	
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, (user) => {
 
@@ -36,7 +36,7 @@ const App = () => {
 		return () => unsubscribe();
 
 	}, []);
-	*/
+	
 
 	const [speechText, setSpeechText] = useState("");
 	const speech = (
@@ -94,7 +94,7 @@ const App = () => {
 		</View>
 	);
 
-	const auth = (
+	const authorization = (
 		// Provide auth context to children
 		<AuthContext.Provider value={{ user, isLoggedIn }}>
 			<NavigationContainer>
@@ -105,7 +105,7 @@ const App = () => {
 		</AuthContext.Provider>
 	);
 
-	return auth;
+	return authorization;
 };
 
 export default App;
