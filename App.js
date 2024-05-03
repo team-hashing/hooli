@@ -1,47 +1,111 @@
-import React, { createContext, useState, useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { auth } from './firebaseConfig';
-import { onAuthStateChanged } from 'firebase/auth';
+import React, { createContext, useState, useEffect } 	from 'react';
+import { NavigationContainer } 							from '@react-navigation/native';
+import { auth } 										from './firebaseConfig';
+import { onAuthStateChanged } 							from 'firebase/auth';
+import { View, TextInput, Button, StyleSheet, Text } 	from 'react-native';
 
-import BottomTabNavigator from './components/BottomTabNavigator';
-import AuthStack from './components/AuthStack'; // Importing AuthStack from its own file
+import BottomTabNavigator 		from './components/BottomTabNavigator';
+import AuthStack 				from './components/AuthStack';
+import Record 					from './components/Record';
 
 // Creating a context for authentication
 export const AuthContext = createContext({ user: null, isLoggedIn: false });
 
 const App = () => {
-  // State variables for user and login status
-  const [user, setUser] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
-  // Effect hook to handle authentication state changes
-  useEffect(() => {
-    // Subscribe to auth state changes
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // If user is logged in, update state
-        setIsLoggedIn(true);
-        setUser(user);
-      } else {
-        // If user is logged out, update state
-        setIsLoggedIn(false);
-        setUser(null);
-      }
-    });
+	// State variables for user and login status
+	const [user, setUser] = useState(null);
+	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
-  }, []);
+	// Effect hook to handle authentication state changes
+	/*
+	useEffect(() => {
+		const unsubscribe = onAuthStateChanged(auth, (user) => {
 
-  return (
-    // Provide auth context to children
-    <AuthContext.Provider value={{ user, isLoggedIn }}>
-      <NavigationContainer>
-        {/* Render different navigators based on auth state */}
-        {isLoggedIn ? <BottomTabNavigator /> : <AuthStack />}
-      </NavigationContainer>
-    </AuthContext.Provider>
-  );
+			if (user) {
+				setIsLoggedIn(true);
+				setUser(user);
+
+			} else {
+				setIsLoggedIn(false);
+				setUser(null);
+			}
+
+		});
+
+		// Cleanup subscription on unmount
+		return () => unsubscribe();
+
+	}, []);
+	*/
+
+	const [speechText, setSpeechText] = useState("");
+	const speech = (
+		<View>
+			<View >
+				<Text>Speech Text</Text>
+				<TextInput
+					multiline
+
+					numberOfLines={6}
+					value={speechText}
+					maxLength={500}
+					editable={true}
+					style={{
+						borderColor: "black",
+						borderWidth: 1,
+						margin: 10,
+						padding: 10,
+						textAlignVertical: "top",
+						backgroundColor: "#A00",
+					}}
+				/>
+				<View
+					style={{
+						alignItems: "flex-end",
+						flex: 1,
+						flexDirection: "row",
+						justifyContent: "space-between",
+					}}
+				>
+					<Button
+						title="Save"
+						color={"#007AFF"}
+						onPress={async () => {
+							console.log("save");
+						}}
+					/>
+					<Button
+						title="Clear"
+						color={"#007AFF"}
+						onPress={() => {
+							setSpeechText("");
+						}}
+					/>
+				</View>
+			</View>
+			<Record
+				onSpeechEnd={(value) => {
+					setSpeechText(value[0]);
+				}}
+				onSpeechStart={() => {
+					setSpeechText("");
+				}}
+			/>
+		</View>
+	);
+
+	const auth = (
+		// Provide auth context to children
+		<AuthContext.Provider value={{ user, isLoggedIn }}>
+			<NavigationContainer>
+				{/* Render different navigators based on auth state */}
+				{isLoggedIn ? <BottomTabNavigator /> : <AuthStack />}
+
+			</NavigationContainer>
+		</AuthContext.Provider>
+	);
+
+	return auth;
 };
 
 export default App;
