@@ -53,6 +53,7 @@ app.post('/generate', async (req, res) => {
     await experienceRef.set({
         id: experienceRef.id,
         user: userRef,
+        date: new Date().toISOString().split('T')[0],
         ...response,
     });
 
@@ -74,6 +75,26 @@ app.post('/getExperiences', async (req, res) => {
 	// Send the experiences as the response
 	console.log(experiences);
 	res.send(experiences);
+});
+
+app.post('/getExperiencesByDate', async (req, res) => {
+    const { userId, date } = req.body;
+
+	const targetDate = date;
+
+    // Get a reference to the user
+    const userRef = db.collection('users').doc(userId);
+
+    // Query the experiences collection for experiences where the user field is equal to the user reference
+    // and the date field is equal to the target date
+	// Query the experiences collection for experiences where the user field is equal to the user reference
+	const snapshot = await db.collection('experiences').where('user', '==', userRef).where('date', '==', targetDate).get();
+
+    // Map over the documents in the snapshot to get the data for each experience
+    const experiences = snapshot.docs.map(doc => doc.data());
+
+    // Send the experiences as the response
+    res.send(experiences);
 });
 
 app.post('/deleteChallenge', async (req, res) => {
