@@ -2,17 +2,15 @@ import React, { useState } from 'react';
 import { Layout, Button, Text, Icon, Modal, Calendar } from '@ui-kitten/components';
 import { StyleSheet } from 'react-native';
 
-const DayPickerComponent = () => {
+const DayPickerComponent = ({ onDateChange }) => {
   const today = new Date();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isModalVisible, setModalVisible] = useState(false);
-
-  console.log(today);
-  console.log(selectedDate);
-
+  
   const handlePrevDay = () => {
-    console.log('prev day');
+
     setSelectedDate(prevDate => new Date(prevDate.setDate(prevDate.getDate() - 1)));
+    onDateChange(selectedDate.toISOString().split('T')[0]);
   };
 
   const handleNextDay = () => {
@@ -20,11 +18,11 @@ const DayPickerComponent = () => {
       return;
     }
   
-    console.log('aaaa day');
     setSelectedDate(prevDate => {
       const nextDate = new Date(prevDate.setDate(prevDate.getDate() + 1));
       return nextDate;
     });
+    onDateChange(selectedDate.toISOString().split('T')[0]);
   };
 
   const handleDateTextClick = () => {
@@ -33,8 +31,8 @@ const DayPickerComponent = () => {
 
   const handleDateSelection = (date) => {
     const selectedDate = new Date(date.setDate(date.getDate() + 1));
-    console.log('bbb day');
     setSelectedDate(selectedDate);
+    onDateChange(selectedDate.toISOString().split('T')[0]);
     setModalVisible(false);
   };
 
@@ -53,11 +51,16 @@ const DayPickerComponent = () => {
           <Icon style={styles.icons} fill={isNextDayDisabled? '#8F9BB3':'black'} name='arrow-forward-outline' />
         </Layout>
       </Button>
-      <Modal visible={isModalVisible} allowBackdrop={true} onBackdropPress={() => setModalVisible(false)}>
+      <Modal 
+          visible={isModalVisible}
+          allowBackdrop={true} 
+          onBackdropPress={() => setModalVisible(false)}
+          backdropStyle={styles.backdrop}>
         <Calendar
           date={selectedDate}
           onSelect={handleDateSelection}
           max={today}
+          style={styles.calendarStyle}
         />
       </Modal>
     </Layout>
@@ -73,17 +76,16 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontSize: 18,
-    fontWeight: 'bold',
+    padding: 10,
   },
   button: {
     borderRadius: 10,
     height: 20,
-    color: 'transparent',
   },
   icons: {
     width: 20,
     height: 20,
-    backgroundColor: 'transparent',
+
   },
   disabledIcon: {
     width: 20,
@@ -93,6 +95,14 @@ const styles = StyleSheet.create({
   },
   iconLayout: {
     backgroundColor: 'transparent',
+  },
+  calendarStyle: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    elevation: 5
+  },
+  backdrop: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
 });
 

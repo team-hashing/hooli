@@ -11,7 +11,6 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, '0.0.0.0', () => {
-	console.log(`Server listening at http://localhost:${port}`);
 });
 /*
 app.get('/generate', async (req, res) => {
@@ -73,7 +72,6 @@ app.post('/getExperiences', async (req, res) => {
 	const experiences = snapshot.docs.map(doc => doc.data());
 
 	// Send the experiences as the response
-	console.log(experiences);
 	res.send(experiences);
 });
 
@@ -101,7 +99,6 @@ app.post('/deleteChallenge', async (req, res) => {
     const { userId, experienceId, challengeId } = req.body;
 
     if (typeof userId !== 'string' || userId === '') {
-        console.log('Invalid userId');
         res.status(400).send('Invalid userId');
         return;
     }
@@ -114,7 +111,6 @@ app.post('/deleteChallenge', async (req, res) => {
     const experienceSnapshot = await experienceRef.get();
 
     if (!experienceSnapshot.exists) {
-        console.log('Experience not found');
         res.status(404).send('Experience not found');
         return;
     }
@@ -133,11 +129,9 @@ app.post('/deleteChallenge', async (req, res) => {
         // Update the experience document with the new future_challenges array
         await experienceRef.update({ future_challenges: experience.future_challenges });
 
-        console.log('Challenge deleted:', challengeId);
         res.send({ message: 'Challenge deleted successfully' });
         return;
     }
 
-    console.log('Challenge not found');
     res.status(404).send('Challenge not found');
 });
