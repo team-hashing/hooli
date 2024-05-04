@@ -80,11 +80,10 @@ const ChallengeScreen = () => {
         );
     };
 
-
-  const challenges = experiences.flatMap(experience => experience.future_challenges);
+    const challenges = experiences.flatMap(experience => experience.future_challenges.map(challenge => ({ ...challenge, experienceId: experience.id })));
 
   const renderItem = ({ item: challenge }) => (
-    <Swipeable renderRightActions={() => renderRightAction(experience.id, challenge.id)} >
+    <Swipeable renderRightActions={() => renderRightAction(challenge.experienceId, challenge.id)} >
         <Card style={styles.challengeContainer}>
             <Text style={styles.challengeTitle}>{challenge.challenge}</Text>
             <Text style={styles.challengeDescription}>{challenge.challenge_description}</Text>
