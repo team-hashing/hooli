@@ -10,6 +10,7 @@ const ActivityScreen = () => {
 
     useEffect(() => {
         const userId = auth.currentUser.uid;
+        console.log(userId);
 
         fetch(`http://${HOST}:3000/getExperiences`, {
             method: 'POST',
@@ -23,6 +24,7 @@ const ActivityScreen = () => {
             .then(response => response.json())
             .then(data => setExperiences(data))
             .catch(error => console.error(error));
+        console.log(experiences);
     }, []);
 
     return (

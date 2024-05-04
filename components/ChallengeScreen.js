@@ -14,6 +14,7 @@ const ChallengeScreen = () => {
 
     useEffect(() => {
         const userId = auth.currentUser.uid;
+        console.log(userId);
 
         fetch(`http://${HOST}:3000/getExperiences`, {
             method: 'POST',
@@ -27,10 +28,11 @@ const ChallengeScreen = () => {
             .then(response => response.json())
             .then(data => setExperiences(data))
             .catch(error => console.error(error));
+        console.log(experiences);
     }, []);
 
-    const deleteChallenge = (challengeId) => {
-        const userId = '8eo4fLDnMhhodi2mIWsq5i1ahO82';
+    const deleteChallenge = (experienceId, challengeId) => {
+        const userId = auth.currentUser.uid;
 
         fetch(`http://${HOST}:3000/deleteChallenge`, {
             method: 'POST',
@@ -39,21 +41,41 @@ const ChallengeScreen = () => {
             },
             body: JSON.stringify({
                 userId: userId,
+                experienceId: experienceId,
                 challengeId: challengeId,
             }),
         })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    // If the server responds with a status code other than 200, throw an error
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.message === 'Challenge deleted successfully') {
-                    setExperiences(experiences.filter(experience => experience.id !== challengeId));
+                    // If the challenge was deleted successfully, remove it from the experiences array
+                    setExperiences(experiences.map(experience => {
+                        if (experience.id === experienceId) {
+                            return {
+                                ...experience,
+                                future_challenges: experience.future_challenges.filter(challenge => challenge.id !== challengeId),
+                            };
+                        }
+                        return experience;
+                    }));
+                } else {
+                    // If the server responded with a message other than 'Challenge deleted successfully', log the message
+                    console.error(data.message);
                 }
             })
             .catch(error => console.error(error));
     };
 
-    const renderRightAction = (challengeId) => {
+    const renderRightAction = (experienceId, challengeId) => {
+        console.log(challengeId);
         return (
-            <RectButton style={styles.deleteButton} onPress={() => deleteChallenge(challengeId)}>
+            <RectButton style={styles.deleteButton} onPress={() => deleteChallenge(experienceId, challengeId)}>
                 <Text style={styles.deleteButtonText}>Delete</Text>
             </RectButton>
         );
@@ -66,12 +88,7 @@ const ChallengeScreen = () => {
                     Array.isArray(experience.future_challenges) && experience.future_challenges.map((challenge, challengeIndex) => (
                         <Swipeable
                             key={`${index}-${challengeIndex}`}
-                            renderRightActions={() => renderRightAction(challenge.id)}
-                            onSwipeableOpen={(state) => {
-                                if (state.swipeDirection === 'right') {
-                                    deleteChallenge(challenge.id);
-                                }
-                            }}
+                            renderRightActions={() => renderRightAction(experience.id, challenge.id)}
                         >
                             <View style={styles.challengeContainer}>
                                 <Text style={styles.challengeTitle}>{challenge.challenge}</Text>
