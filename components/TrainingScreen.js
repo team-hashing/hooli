@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native';
+import { HOST } from '@env'
 
 const TrainingScreen = () => {
     const [experiences, setExperiences] = useState([]);
@@ -9,7 +10,7 @@ const TrainingScreen = () => {
     useEffect(() => {
         const userId = '8eo4fLDnMhhodi2mIWsq5i1ahO82';
 
-        fetch('http://192.168.1.164:3000/getExperiences', {
+        fetch(`http://${HOST}:3000/getExperiences`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { Button, Input, Layout, Icon } from '@ui-kitten/components';
+import { HOST } from '@env'
 
 
 const SendIcon = (props) => (
@@ -18,7 +19,7 @@ const MealsScreen = () => {
 		try {
 			const userId = '8eo4fLDnMhhodi2mIWsq5i1ahO82';
 
-			const response = await fetch('http://192.168.1.164:3000/generate', {
+			const response = await fetch(`http://${HOST}:3000/generate`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',

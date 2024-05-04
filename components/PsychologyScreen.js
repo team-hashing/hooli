@@ -5,6 +5,7 @@ import { ScrollView } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { HOST } from '@env'
 
 
 const PsychologyScreen = () => {
@@ -13,7 +14,7 @@ const PsychologyScreen = () => {
     useEffect(() => {
         const userId = '8eo4fLDnMhhodi2mIWsq5i1ahO82';
 
-        fetch('http://192.168.1.164:3000/getExperiences', {
+        fetch(`http://${HOST}:3000/getExperiences`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -30,7 +31,7 @@ const PsychologyScreen = () => {
     const deleteChallenge = (challengeId) => {
         const userId = '8eo4fLDnMhhodi2mIWsq5i1ahO82';
 
-        fetch('http://192.168.1.164:3000/deleteChallenge', {
+        fetch(`http://${HOST}:3000/deleteChallenge`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
