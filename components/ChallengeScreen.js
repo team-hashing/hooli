@@ -14,14 +14,15 @@ const ChallengeScreen = () => {
     useEffect(() => {
         const userId = auth.currentUser.uid;
         console.log(userId);
-
-        fetch(`http://${HOST}:3000/getExperiences`, {
+        const date = new Date().toISOString().split('T')[0];
+        fetch(`http://${HOST}:3000/getExperiencesByDate`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 userId: userId,
+                date: date,
             }),
         })
             .then(response => response.json())
@@ -79,9 +80,11 @@ const ChallengeScreen = () => {
             </RectButton>
         );
     };
-
-    const challenges = experiences.flatMap(experience => experience.future_challenges.map(challenge => ({ ...challenge, experienceId: experience.id })));
-
+    const challenges = experiences.flatMap(experience => 
+        Array.isArray(experience.future_challenges) 
+        ? experience.future_challenges.map(challenge => ({ ...challenge, experienceId: experience.id }))
+        : []
+    );
   const renderItem = ({ item: challenge }) => (
     <Swipeable renderRightActions={() => renderRightAction(challenge.experienceId, challenge.id)} >
         <Card style={styles.challengeContainer}>
