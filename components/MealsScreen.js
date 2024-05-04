@@ -2,60 +2,82 @@ import React, { useState } from 'react';
 import { StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { Button, Input, Layout } from '@ui-kitten/components';
 
-const MealsScreen = () => {
-  const [text, setText] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = useState(null);
+const MealsScreen = => () {
+	const [text, setText] = useState('');
+	const [loading, setLoading] = useState(false);
+	const [data, setData] = useState(null);
 
-  const generateContent = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(`http:/192.168.1.144:3000/generate?text=${encodeURIComponent(text)}`);
-      const data = await response.json(); 
-      setData(data);
-    } catch (error) {
-      Alert.alert('Error', error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  return (
-    <Layout style={styles.container}>
-      <Input
-        multiline={true}
-        style={styles.input}
-        value={text}
-        onChangeText={setText}
-        placeholder="Enter text"
-        numberOfLines={4}
-      />
-      <Button onPress={generateContent} style={styles.button} disabled={loading}>
-        Generate
-      </Button>
-      {loading && <ActivityIndicator size="large" color="#0000ff" />}
-    </Layout>
-  );
-};
+	const generateContent = async () => {
+		setLoading(true);
+		try {
+			const userId = '8eo4fLDnMhhodi2mIWsq5i1ahO82';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%'
-  },
-  button: {
-    marginVertical: 10,
-    width: '80%',
-  },
-  input: {
-    marginVertical: 10,
-    width: '80%',
-    minHeight: 64,
-    maxHeight: 280,
-    overflow: 'auto',
-  },
-});
+			const response = await fetch('http://192.168.1.164:3000/generate', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					text: text,
+					userId: userId,
+				}),
+			});
+
+			const data = await response.json();
+			setData(data);
+		} catch (error) {
+			Alert.alert('Error', error.message);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	return (
+		<View>
+			<TextInput
+				value={text}
+				onChangeText={setText}
+				placeholder="Enter text"
+				multiline
+				numberOfLines={4}
+				style={{ height: 100 }}
+			/>
+			<Button
+				title="Generate"
+				onPress={generateContent}
+				disabled={loading}
+			/>
+			{loading && <ActivityIndicator size="large" color="#0000ff" />}
+			{/*}
+			{data && (
+				<View>
+					<Text>{data.message}</Text>
+					{data && data.activities && (
+						data.activities.map((activity, index) => (
+							<TouchableOpacity key={index}>
+								<Text>{activity.activity}</Text>
+								<Text>{activity.activity_description}</Text>
+								<Text>{activity.feedback_message}</Text>
+								<Text>{activity.eco_friendly ? 'Eco-friendly' : 'Not eco-friendly'}</Text>
+							</TouchableOpacity>
+						))
+					)}
+					{data && data.future_challenges && (
+						data.future_challenges.map((challenge, index) => (
+							<TouchableOpacity key={index}>
+								<Text>{challenge.challenge}</Text>
+								<Text>{challenge.challenge_description}</Text>
+								<Text>Difficulty: {challenge.challenge_dificulty}</Text>
+							</TouchableOpacity>
+						))
+					)}
+				</View>
+			)}
+			*/}
+		</View>
+	);
+}
 
 export default MealsScreen;
+
