@@ -28,6 +28,20 @@ admin.initializeApp({
 });
 
 
+const calculatePoints = (activities) => {
+	// if activity.eco_friendly + 10 points, else -10 points
+	let points = 0;
+	for (let i = 0; i < activities.length; i++) {
+		if (activities[i].eco_friendly) {
+			points += 10;
+		} else {
+			points -= 10;
+		}
+	}
+	return points;
+}
+
+
 
 const db = admin.firestore();
 app.use(express.json());
@@ -46,6 +60,9 @@ app.post('/generate', async (req, res) => {
         response.future_challenges = response.future_challenges.map(challenge => ({ id: uuidv4(), isCompleted: false, ...challenge }));
     }
 
+    // Calculate points from activities
+    const points = calculatePoints(response.activities);
+
     // Save the response as an "experience" object for the user
     const userRef = db.collection('users').doc(userId);
     const experienceRef = db.collection('experiences').doc(uuidv4());
@@ -55,6 +72,10 @@ app.post('/generate', async (req, res) => {
         date: new Date().toISOString().split('T')[0],
         ...response,
     });
+
+
+    // Update user's points
+    await userRef.update({ points: admin.firestore.FieldValue.increment(points) });
 
     res.send(response);
 });
@@ -136,11 +157,12 @@ app.post('/deleteChallenge', async (req, res) => {
     res.status(404).send('Challenge not found');
 });
 
+
 app.post('/completeChallenge', async (req, res) => {
     const { userId, experienceId, challengeId } = req.body;
 
     if (typeof userId !== 'string' || userId === '') {
-		console.log("Invalid userId");
+        console.log("Invalid userId");
         res.status(400).send('Invalid userId');
         return;
     }
@@ -168,6 +190,9 @@ app.post('/completeChallenge', async (req, res) => {
 
         // Update the experience document with the new future_challenges array
         await experienceRef.update({ future_challenges: experience.future_challenges });
+
+        // Increment completedChallenges in Firestore
+        await userRef.update({ completedChallenges: admin.firestore.FieldValue.increment(1) });
 
         res.send({ message: 'Challenge marked as completed successfully' });
         return;
@@ -207,6 +232,9 @@ app.post('/incompleteChallenge', async (req, res) => {
 
         // Update the experience document with the new future_challenges array
         await experienceRef.update({ future_challenges: experience.future_challenges });
+
+        // Decrement completedChallenges in Firestore
+        await userRef.update({ completedChallenges: admin.firestore.FieldValue.increment(-1) });
 
         res.send({ message: 'Challenge marked as incomplete successfully' });
         return;
