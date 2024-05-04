@@ -135,3 +135,82 @@ app.post('/deleteChallenge', async (req, res) => {
 
     res.status(404).send('Challenge not found');
 });
+
+app.post('/completeChallenge', async (req, res) => {
+    const { userId, experienceId, challengeId } = req.body;
+
+    if (typeof userId !== 'string' || userId === '') {
+		console.log("Invalid userId");
+        res.status(400).send('Invalid userId');
+        return;
+    }
+
+    // Get a reference to the user
+    const userRef = db.collection('users').doc(userId);
+
+    // Get the specific experience of the user based on experienceId
+    const experienceRef = db.collection('experiences').doc(experienceId);
+    const experienceSnapshot = await experienceRef.get();
+
+    if (!experienceSnapshot.exists) {
+        res.status(404).send('Experience not found');
+        return;
+    }
+
+    const experience = experienceSnapshot.data();
+
+    // Check if the experience contains the challenge with the given challengeId
+    const challengeIndex = experience.future_challenges.findIndex(challenge => challenge.id == challengeId);
+
+    if (challengeIndex !== -1) {
+        // The experience contains the challenge, set isCompleted to true
+        experience.future_challenges[challengeIndex].isCompleted = true;
+
+        // Update the experience document with the new future_challenges array
+        await experienceRef.update({ future_challenges: experience.future_challenges });
+
+        res.send({ message: 'Challenge marked as completed successfully' });
+        return;
+    }
+
+    res.status(404).send('Challenge not found');
+});
+
+app.post('/incompleteChallenge', async (req, res) => {
+    const { userId, experienceId, challengeId } = req.body;
+
+    if (typeof userId !== 'string' || userId === '') {
+        res.status(400).send('Invalid userId');
+        return;
+    }
+
+    // Get a reference to the user
+    const userRef = db.collection('users').doc(userId);
+
+    // Get the specific experience of the user based on experienceId
+    const experienceRef = db.collection('experiences').doc(experienceId);
+    const experienceSnapshot = await experienceRef.get();
+
+    if (!experienceSnapshot.exists) {
+        res.status(404).send('Experience not found');
+        return;
+    }
+
+    const experience = experienceSnapshot.data();
+
+    // Check if the experience contains the challenge with the given challengeId
+    const challengeIndex = experience.future_challenges.findIndex(challenge => challenge.id == challengeId);
+
+    if (challengeIndex !== -1) {
+        // The experience contains the challenge, set isCompleted to false
+        experience.future_challenges[challengeIndex].isCompleted = false;
+
+        // Update the experience document with the new future_challenges array
+        await experienceRef.update({ future_challenges: experience.future_challenges });
+
+        res.send({ message: 'Challenge marked as incomplete successfully' });
+        return;
+    }
+
+    res.status(404).send('Challenge not found');
+});

@@ -55,7 +55,7 @@ const {
                     {
                       "challenge": "challenge name",
                       "challenge_description": "challenge description",
-                      "challenge_dificulty": "0/1/2",
+                      "challenge_difficulty": "0/1/2",
                     }
                   ],
                 }`
