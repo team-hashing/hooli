@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 import { HOST } from '@env'
 import { Layout, Text, Card, List } from '@ui-kitten/components';
 import {auth} from '../firebaseConfig';
+import DayPickerComponent from './dayPickerComponent';
 
 const ActivityScreen = () => {
     const [experiences, setExperiences] = useState([]);
@@ -42,6 +43,7 @@ const ActivityScreen = () => {
 
     return (
         <Layout style={styles.container}>
+            <DayPickerComponent />
             <List
                 data={activities}
                 renderItem={renderItem}
