@@ -5,6 +5,13 @@ import { ActivityIndicator } from 'react-native';
 import { HOST } from '@env'
 import { auth } from '../firebaseConfig';
 import { Layout, Button, Icon } from '@ui-kitten/components';
+import { useTheme } from '@ui-kitten/components';
+import ResponseWizardPage from './ResponseWizardPage';
+import ActivitiesWizardPage from './ActivitiesWizardPage';
+import ChallengesWizardPage from './ChallengesWizardPage';
+import LoadingWizardPage from './LoadingWizardPage';
+
+
 
 const { width } = Dimensions.get('window');
 
@@ -14,14 +21,11 @@ const WizardScreen = ({ route, navigation }) => {
     const [data, setData] = useState(null);
 
     const { width } = Dimensions.get('window');
-    const numberOfPages = 3; // Update this to the number of pages
-    
-    const [currentPage, setCurrentPage] = useState(0);
 
     useEffect(() => {
         navigation.setOptions({
           headerRight: () => (
-                  <Icon name='close-outline' style={styles.settingsIcon} onPress={() => navigation.navigate('DiaryPage')}/>
+                  <Icon name='close-outline' style={styles.closeIcon} onPress={() => navigation.navigate('DiaryPage')}/>
           ),
         });
       }, [navigation]);
@@ -62,9 +66,10 @@ const WizardScreen = ({ route, navigation }) => {
       
         // Divide the horizontal offset by the width of the view to see which page is visible
         const pageNum = Math.floor(contentOffset.x / viewSize.width);
-        setCurrentPage(pageNum);
       };
     
+
+
     return (
         <ScrollView
         horizontal={true}
@@ -74,57 +79,48 @@ const WizardScreen = ({ route, navigation }) => {
         scrollEventThrottle={16}
         >
         {loading ? (
-            <View style={{ width, justifyContent: 'center', alignItems: 'center' }}>
-                <ActivityIndicator size="large" color="#0000ff" />
-            </View>
+                <View style={styles.page}>
+                    <LoadingWizardPage />
+                </View>
             ) : (
             <>
-                <View style={styles.ResponseMessage}>
-                <Text>Screen 1</Text>
+                <View style={styles.page}>
+                    <ResponseWizardPage data={data}/>
                 </View>
-                <View style={{ width, justifyContent: 'center', alignItems: 'center' }}>
-                <Text>Screen 2</Text>
+                <View style={styles.page}>
+                    <ActivitiesWizardPage data={data}/>
                 </View>
-                <View style={{ width, justifyContent: 'center', alignItems: 'center' }}>
-                <Text>Screen 3</Text>
+                <View style={styles.page}>
+                    <ChallengesWizardPage data={data}/>
                 </View>
                 
-                {/* Add more views for more screens */}
             </>
             )}
             
         </ScrollView>
     );
+
+    
 };
 
-
 const styles = StyleSheet.create({
-    dotsView: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        zIndex: 100,
-    },
-    dot: {
-        color: 'red',
-    },
     container: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
-    configButtonView: {
-      backgroundColor: 'transparent',
-    },
-    settingsIcon: {
+    closeIcon: {
       width: 25,
       height: 25,
       alignSelf: 'center',
       margin: 20
     },
-    closeButton: {
-        backgroundColor: 'transparent',
+    page: {
+        width,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });
+
 
 export default WizardScreen;
