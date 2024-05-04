@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Alert, ActivityIndicator, Text } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { Button, Input, Layout } from '@ui-kitten/components';
 
-export default function MealsScreen() {
+const MealsScreen = => () {
 	const [text, setText] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [data, setData] = useState(null);
@@ -78,3 +78,6 @@ export default function MealsScreen() {
 		</View>
 	);
 }
+
+export default MealsScreen;
+

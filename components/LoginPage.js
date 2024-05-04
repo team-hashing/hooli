@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Button, TextInput, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { authLoginPassword } from '../businessLogic/user/authLoginPassword';
+import { Button, Input, Layout } from '@ui-kitten/components';
+
 
 const SignupPage = () => {
   const [email, setEmail] = useState('');
@@ -15,21 +17,42 @@ const SignupPage = () => {
   };
 
   return (
-    <View>
-      <TextInput
+    <Layout style={styles.container}>
+      <Input
+        style={styles.input}
         value={email}
         onChangeText={setEmail}
         placeholder="Email"
       />
-      <TextInput
+      <Input
+        style={styles.input}
         value={password}
         onChangeText={setPassword}
         placeholder="Password"
         secureTextEntry
       />
-      <Button title="Login" onPress={handleLogin} />
-    </View>
+      <Button onPress={handleLogin} style={styles.button} >
+        Log In
+      </Button>
+    </Layout>
   );
+};
+
+const styles = {
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%'
+  },
+  button: {
+    marginVertical: 10,
+    width: '80%',
+  },
+  input: {
+    marginVertical: 10,
+    width: '80%',
+  },
 };
 
 export default SignupPage;
