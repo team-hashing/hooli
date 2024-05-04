@@ -8,7 +8,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { HOST } from '@env'
 
 
-const PsychologyScreen = () => {
+const ChallengeScreen = () => {
     const [experiences, setExperiences] = useState([]);
 
     useEffect(() => {
@@ -128,4 +128,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default PsychologyScreen;
+export default ChallengeScreen;

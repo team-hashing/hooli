@@ -8,7 +8,7 @@ const SendIcon = (props) => (
 	<Icon {...props} name='paper-plane-outline'/>
 );
 
-const MealsScreen = () => {
+const DiaryScreen = () => {
 	const [text, setText] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [data, setData] = useState(null);
@@ -74,5 +74,5 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default MealsScreen;
+export default DiaryScreen;
 

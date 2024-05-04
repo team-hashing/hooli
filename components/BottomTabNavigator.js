@@ -1,9 +1,9 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome6 } from '@expo/vector-icons';
-import MealsScreen from './MealsScreen';
-import TrainingScreen from './TrainingScreen';
-import PsychologyScreen from './PsychologyScreen';
+import DiaryScreen from './DiaryScreen';
+import ActivityScreen from './ActivityScreen';
+import ChallengeScreen from './ChallengeScreen';
 import ProfileStack from './ProfileStack';
 
 const Tab = createBottomTabNavigator();
@@ -31,9 +31,9 @@ const BottomTabNavigator = () => {
         tabBarInactiveTintColor: 'gray',
       })}
     >
-      <Tab.Screen name="Meals" component={MealsScreen} />
-      <Tab.Screen name="Training" component={TrainingScreen} />
-      <Tab.Screen name="Psychology" component={PsychologyScreen} />
+      <Tab.Screen name="Meals" component={DiaryScreen} />
+      <Tab.Screen name="Training" component={ActivityScreen} />
+      <Tab.Screen name="Psychology" component={ChallengeScreen} />
       <Tab.Screen name="ProfileStack" component={ProfileStack} options={{ headerShown: false }}/>
     </Tab.Navigator>
   );

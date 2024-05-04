@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native';
 import { HOST } from '@env'
 
-const TrainingScreen = () => {
+const ActivityScreen = () => {
     const [experiences, setExperiences] = useState([]);
 
     useEffect(() => {
@@ -86,4 +86,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default TrainingScreen;
+export default ActivityScreen;
