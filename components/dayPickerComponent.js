@@ -40,17 +40,9 @@ const DayPickerComponent = ({ onDateChange }) => {
   
   return (
     <Layout style={styles.container}>
-      <Button appearance='ghost' onPress={handlePrevDay}>
-        <Layout style={styles.iconLayout}>
-          <Icon style={styles.icons} name='arrow-back-outline' />
-        </Layout>
-      </Button>
+      <Icon style={styles.icons} name='arrow-back-outline'  onPress={handlePrevDay} />
       <Text style={styles.dateText} onPress={handleDateTextClick}>{selectedDate.toISOString().split('T')[0]}</Text>
-      <Button appearance='ghost' onPress={handleNextDay}>
-        <Layout style={styles.iconLayout}>
-          <Icon style={styles.icons} fill={isNextDayDisabled? '#8F9BB3':'black'} name='arrow-forward-outline' />
-        </Layout>
-      </Button>
+      <Icon style={styles.icons} fill={isNextDayDisabled? '#8F9BB3':'black'} name='arrow-forward-outline' onPress={handleNextDay} />
       <Modal 
           visible={isModalVisible}
           allowBackdrop={true} 
@@ -85,16 +77,13 @@ const styles = StyleSheet.create({
   icons: {
     width: 20,
     height: 20,
-
+    paddingHorizontal: 30
   },
   disabledIcon: {
     width: 20,
     height: 20,
     color: 'red',
     backgroundColor: 'disabled',
-  },
-  iconLayout: {
-    backgroundColor: 'transparent',
   },
   calendarStyle: {
     backgroundColor: 'white',
