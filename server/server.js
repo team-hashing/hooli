@@ -44,7 +44,7 @@ app.post('/generate', async (req, res) => {
         response.activities = response.activities.map(activity => ({ id: uuidv4(), ...activity }));
     }
     if (response.future_challenges) {
-        response.future_challenges = response.future_challenges.map(challenge => ({ id: uuidv4(), ...challenge }));
+        response.future_challenges = response.future_challenges.map(challenge => ({ id: uuidv4(), isCompleted: false, ...challenge }));
     }
 
     // Save the response as an "experience" object for the user
