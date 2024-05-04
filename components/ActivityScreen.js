@@ -1,31 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
-import { HOST } from '@env'
 import { Layout, Text, Card, List } from '@ui-kitten/components';
 import {auth} from '../firebaseConfig';
 import DayPickerComponent from './dayPickerComponent';
+import getExperiencesByDate from '../businessLogic/experiences/getExperiencesByDate';
+import { useFocusEffect } from '@react-navigation/native';
 
 const ActivityScreen = () => {
     const [experiences, setExperiences] = useState([]);
 
-    useEffect(() => {
-        const userId = auth.currentUser.uid;
-        console.log(userId);
-
-        fetch(`http://${HOST}:3000/getExperiences`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                userId: userId,
-            }),
-        })
-            .then(response => response.json())
-            .then(data => setExperiences(data))
+    const handleDateChange = (date) => {
+        getExperiencesByDate(auth.currentUser.uid, date)
+            .then(response => setExperiences(response))
             .catch(error => console.error(error));
-        console.log(experiences);
-    }, []);
+            setExperiences(experiences);
+    };
+    
+    const callback = React.useCallback(() => {
+        const userId = auth.currentUser.uid;
+        getExperiencesByDate(userId, new Date().toISOString().split('T')[0])
+            .then(response => setExperiences(response))
+            .catch(error => console.error(error));
+        }, []);
+    
+    useFocusEffect(callback);
 
     const renderItem = ({ item: activity }) => (
         <Card style={styles.activityContainer}>
@@ -43,7 +41,7 @@ const ActivityScreen = () => {
 
     return (
         <Layout style={styles.container}>
-            <DayPickerComponent />
+            <DayPickerComponent onDateChange={handleDateChange} />
             <List
                 data={activities}
                 renderItem={renderItem}

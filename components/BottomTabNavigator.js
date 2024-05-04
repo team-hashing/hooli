@@ -1,42 +1,50 @@
 import React from 'react';
+import { BottomNavigation, BottomNavigationTab, Icon } from '@ui-kitten/components';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { FontAwesome6 } from '@expo/vector-icons';
+import { NavigationContainer } from '@react-navigation/native';
+
+// Import your screens
 import DiaryScreen from './DiaryScreen';
 import ActivityScreen from './ActivityScreen';
 import ChallengeScreen from './ChallengeScreen';
 import ProfileStack from './ProfileStack';
 
-const Tab = createBottomTabNavigator();
+const { Navigator, Screen } = createBottomTabNavigator();
 
-const BottomTabNavigator = () => {
-  return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
+const DiaryIcon = (props) => (
+  <Icon {...props} name='book-outline'/>
+);
 
-          if (route.name === 'ProfileStack') {
-            iconName = focused ? 'circle-user' : 'circle-user';
-          } else if (route.name === 'Meals') {
-            iconName = focused ? 'bowl-food' : 'bowl-food';
-          } else if (route.name === 'Training') {
-            iconName = focused ? 'dumbbell' : 'dumbbell';
-          } else if (route.name === 'Psychology') {
-            iconName = focused ? 'brain' : 'brain';
-          }
+const ActivityIcon = (props) => (
+  <Icon {...props} name='activity-outline'/>
+);
 
-          return <FontAwesome6 name={iconName} size={size} color={color} />;
-        },
-        tabBarActiveTintColor: '#e91e63',
-        tabBarInactiveTintColor: 'gray',
-      })}
-    >
-      <Tab.Screen name="Meals" component={DiaryScreen} />
-      <Tab.Screen name="Training" component={ActivityScreen} />
-      <Tab.Screen name="Psychology" component={ChallengeScreen} />
-      <Tab.Screen name="ProfileStack" component={ProfileStack} options={{ headerShown: false }}/>
-    </Tab.Navigator>
-  );
-};
+const ChallengeIcon = (props) => (
+  <Icon {...props} name='award-outline'/>
+);
 
-export default BottomTabNavigator;
+const ProfileIcon = (props) => (
+  <Icon {...props} name='person-outline'/>
+);
+
+const BottomTabBar = ({ navigation, state }) => (
+  <BottomNavigation
+    selectedIndex={state.index}
+    onSelect={index => navigation.navigate(state.routeNames[index])}>
+    <BottomNavigationTab title='Diary' icon={DiaryIcon}/>
+    <BottomNavigationTab title='Activities' icon={ActivityIcon}/>
+    <BottomNavigationTab title='Challenges' icon={ChallengeIcon}/>
+    <BottomNavigationTab title='Profile' icon={ProfileIcon}/>
+  </BottomNavigation>
+);
+
+const App = () => (
+  <Navigator tabBar={props => <BottomTabBar {...props} />}>
+    <Screen name='Diary' options={{ headerShown: false }} component={DiaryScreen}/>
+    <Screen name='Activities' component={ActivityScreen}/>
+    <Screen name='Challenges' component={ChallengeScreen}/>
+    <Screen name='Profile' component={ProfileStack} options={{ headerShown: false }}/>
+  </Navigator>
+);
+
+export default App;

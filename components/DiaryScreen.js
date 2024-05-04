@@ -43,12 +43,19 @@ const DiaryScreen = () => {
 
 	return (
 		<Layout style={styles.container}>
+			<Layout style={styles.messageContainer}>
+				<Text style={styles.message}>Please explain your day</Text>
+				<Text style={styles.message}>to become more</Text>
+				<Text style={styles.message}>eco-friendly...</Text>
+			</Layout>
+			{loading && <ActivityIndicator size="large" color="#0000ff" />}
+			{data && <Text>{data.message}</Text>}
+        	<Layout style={styles.inputContainer}>
 			<Input
 				value={text}
 				onChangeText={setText}
 				placeholder="Enter text"
 				multiline
-				numberOfLines={4}
 				style={styles.input}
 				accessoryRight={() => 
 					<Button
@@ -56,11 +63,12 @@ const DiaryScreen = () => {
 					  accessoryRight={SendIcon}
 					  onPress={generateContent}
 					  disabled={loading}
+					  style={styles.sendButton}
 					/>
 				  }
 			/>
-			{loading && <ActivityIndicator size="large" color="#0000ff" />}
-			{data && <Text>{data.message}</Text>}
+
+			</Layout>
 		</Layout>
 	);
 }
@@ -68,12 +76,33 @@ const DiaryScreen = () => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		justifyContent: 'center',
 		alignItems: 'center',
 	},
-
+    message: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        textAlign: 'left',
+		color: '#9BBD8E',
+    },
+	sendButton: {
+		marginRight: 10,
+		borderRadius: 50,
+	},
+    inputContainer: {
+        marginBottom: 30,
+		width: '100%',
+    },
 	input: {
-		margin: 10,
-		maxHeight: 250,
+		flexGrow: 1,
+		margin: 20,
+		borderRadius: 20,
+		maxHeight: 500,
+	},
+	messageContainer: {
+		flex: 1,
+		justifyContent: 'center',
+		padding: 20,
 	},
 });
 

@@ -4,33 +4,37 @@ import { RectButton } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { HOST } from '@env'
-import { Layout, Text, Card, List } from '@ui-kitten/components';
+import { Layout, Text, Card, List, CheckBox } from '@ui-kitten/components';
 import { auth } from '../firebaseConfig';
+import getExperiencesByDate from '../businessLogic/experiences/getExperiencesByDate';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 const ChallengeScreen = () => {
     const [experiences, setExperiences] = useState([]);
 
-    useEffect(() => {
-        const userId = auth.currentUser.uid;
-        console.log(userId);
-        const date = new Date().toISOString().split('T')[0];
-        fetch(`http://${HOST}:3000/getExperiencesByDate`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                userId: userId,
-                date: date,
-            }),
-        })
-            .then(response => response.json())
-            .then(data => setExperiences(data))
-            .catch(error => console.error(error));
-        console.log(experiences);
-    }, []);
 
+    const handleCheckboxChange = () => {
+        // Empty callback function
+    };
+
+    const handleDateChange = (date) => {
+        getExperiencesByDate(auth.currentUser.uid, date)
+            .then(response => setExperiences(response))
+            .catch(error => console.error(error));
+            setExperiences(experiences);
+    };
+
+
+    const callback = React.useCallback(() => {
+        const userId = auth.currentUser.uid;
+        const date = new Date().toISOString().split('T')[0];
+        handleDateChange(date);
+    }, []); 
+
+    useFocusEffect(callback);
+
+    
     const deleteChallenge = (experienceId, challengeId) => {
         const userId = auth.currentUser.uid;
 
@@ -73,7 +77,6 @@ const ChallengeScreen = () => {
     };
 
     const renderRightAction = (experienceId, challengeId) => {
-        console.log(challengeId);
         return (
             <RectButton style={styles.deleteButton} onPress={() => deleteChallenge(experienceId, challengeId)}>
                 <Text style={styles.deleteButtonText}>Delete</Text>
@@ -85,12 +88,17 @@ const ChallengeScreen = () => {
         ? experience.future_challenges.map(challenge => ({ ...challenge, experienceId: experience.id }))
         : []
     );
+
   const renderItem = ({ item: challenge }) => (
     <Swipeable renderRightActions={() => renderRightAction(challenge.experienceId, challenge.id)} >
         <Card style={styles.challengeContainer}>
             <Text style={styles.challengeTitle}>{challenge.challenge}</Text>
             <Text style={styles.challengeDescription}>{challenge.challenge_description}</Text>
             <Text style={styles.challengeDifficulty}>Difficulty: {challenge.challenge_difficulty}</Text>
+            <CheckBox
+                    style={styles.checkBox}
+                    onChange={handleCheckboxChange}
+            ></CheckBox>
         </Card>
     </Swipeable>
   );
@@ -147,6 +155,9 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: '600',
         textAlign: 'right',
+    },
+    checkBox: {
+        alignSelf: 'flex-end',
     },
 });
 
