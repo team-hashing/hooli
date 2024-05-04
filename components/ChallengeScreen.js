@@ -8,33 +8,41 @@ import { Layout, Text, Card, List, CheckBox } from '@ui-kitten/components';
 import { auth } from '../firebaseConfig';
 import getExperiencesByDate from '../businessLogic/experiences/getExperiencesByDate';
 import { useFocusEffect } from '@react-navigation/native';
-
+import completeChallenge from '../businessLogic/experiences/completeChallenge';
+import incompleteChallenge from '../businessLogic/experiences/incompleteChallenge';
+import { set } from '@gluestack-style/react';
 
 const ChallengeScreen = () => {
     const [experiences, setExperiences] = useState([]);
+    const [key, setKey] = useState(0);
 
 
-    const handleCheckboxChange = () => {
-        // Empty callback function
-    };
+
 
     const handleDateChange = (date) => {
         getExperiencesByDate(auth.currentUser.uid, date)
             .then(response => setExperiences(response))
             .catch(error => console.error(error));
-            setExperiences(experiences);
+        setExperiences(experiences);
+
     };
+
+    const challenges = experiences.flatMap(experience =>
+        Array.isArray(experience.future_challenges)
+            ? experience.future_challenges.map(challenge => ({ ...challenge, experienceId: experience.id }))
+            : []
+    );
 
 
     const callback = React.useCallback(() => {
         const userId = auth.currentUser.uid;
         const date = new Date().toISOString().split('T')[0];
         handleDateChange(date);
-    }, []); 
+    }, []);
 
     useFocusEffect(callback);
 
-    
+
     const deleteChallenge = (experienceId, challengeId) => {
         const userId = auth.currentUser.uid;
 
@@ -83,25 +91,39 @@ const ChallengeScreen = () => {
             </RectButton>
         );
     };
-    const challenges = experiences.flatMap(experience => 
-        Array.isArray(experience.future_challenges) 
-        ? experience.future_challenges.map(challenge => ({ ...challenge, experienceId: experience.id }))
-        : []
-    );
 
-  const renderItem = ({ item: challenge }) => (
-    <Swipeable renderRightActions={() => renderRightAction(challenge.experienceId, challenge.id)} >
-        <Card style={styles.challengeContainer}>
-            <Text style={styles.challengeTitle}>{challenge.challenge}</Text>
-            <Text style={styles.challengeDescription}>{challenge.challenge_description}</Text>
-            <Text style={styles.challengeDifficulty}>Difficulty: {challenge.challenge_difficulty}</Text>
-            <CheckBox
-                    style={styles.checkBox}
-                    onChange={handleCheckboxChange}
-            ></CheckBox>
-        </Card>
-    </Swipeable>
-  );
+
+    const renderItem = ({ item: challenge }) => {
+        const handleCheckboxChange = async (challenge) => {
+            console.log("C completo? ", challenge.isCompleted);
+            const userId = auth.currentUser.uid;
+            if (challenge.isCompleted) {
+                await incompleteChallenge(userId, challenge.experienceId, challenge.id);
+            } else {
+                await completeChallenge(userId, challenge.experienceId, challenge.id);
+            }
+
+            handleDateChange(new Date().toISOString().split('T')[0]);
+
+        };
+
+        return (
+            <Swipeable renderRightActions={() => renderRightAction(challenge.experienceId, challenge.id)} >
+                <Card style={styles.challengeContainer}>
+                    <Text style={styles.challengeTitle}>{challenge.challenge}</Text>
+                    <Text style={styles.challengeDescription}>{challenge.challenge_description}</Text>
+                    <Text style={styles.challengeDifficulty}>Difficulty: {challenge.challenge_difficulty}</Text>
+                    <CheckBox
+                        style={styles.checkBox}
+                        onChange={() => (handleCheckboxChange(challenge))}
+                        checked={challenge.isCompleted}
+                    ></CheckBox>
+                </Card>
+            </Swipeable>
+        );
+    };
+
+
 
     return (
         <GestureHandlerRootView style={styles.container}>
@@ -109,6 +131,7 @@ const ChallengeScreen = () => {
                 <List
                     data={challenges}
                     renderItem={renderItem}
+                    key={key}
                 />
             </Layout>
         </GestureHandlerRootView>
@@ -149,7 +172,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         paddingLeft: '70%',
         marginLeft: '-70%',
-        
+
     },
     deleteButtonText: {
         color: 'white',
