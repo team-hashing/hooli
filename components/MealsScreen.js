@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import { StyleSheet, Alert, ActivityIndicator } from 'react-native';
-import { Button, Input, Layout } from '@ui-kitten/components';
+import { Button, Input, Layout, Icon } from '@ui-kitten/components';
 
-const MealsScreen = => () {
+
+const SendIcon = (props) => (
+	<Icon {...props} name='paper-plane-outline'/>
+);
+
+const MealsScreen = () => {
 	const [text, setText] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [data, setData] = useState(null);
@@ -34,50 +39,39 @@ const MealsScreen = => () {
 	};
 
 	return (
-		<View>
-			<TextInput
+		<Layout style={styles.container}>
+			<Input
 				value={text}
 				onChangeText={setText}
 				placeholder="Enter text"
 				multiline
 				numberOfLines={4}
-				style={{ height: 100 }}
-			/>
-			<Button
-				title="Generate"
-				onPress={generateContent}
-				disabled={loading}
+				style={styles.input}
+				accessoryRight={() => 
+					<Button
+					  appearance='filled'
+					  accessoryRight={SendIcon}
+					  onPress={generateContent}
+					  disabled={loading}
+					/>
+				  }
 			/>
 			{loading && <ActivityIndicator size="large" color="#0000ff" />}
-			{/*}
-			{data && (
-				<View>
-					<Text>{data.message}</Text>
-					{data && data.activities && (
-						data.activities.map((activity, index) => (
-							<TouchableOpacity key={index}>
-								<Text>{activity.activity}</Text>
-								<Text>{activity.activity_description}</Text>
-								<Text>{activity.feedback_message}</Text>
-								<Text>{activity.eco_friendly ? 'Eco-friendly' : 'Not eco-friendly'}</Text>
-							</TouchableOpacity>
-						))
-					)}
-					{data && data.future_challenges && (
-						data.future_challenges.map((challenge, index) => (
-							<TouchableOpacity key={index}>
-								<Text>{challenge.challenge}</Text>
-								<Text>{challenge.challenge_description}</Text>
-								<Text>Difficulty: {challenge.challenge_dificulty}</Text>
-							</TouchableOpacity>
-						))
-					)}
-				</View>
-			)}
-			*/}
-		</View>
+		</Layout>
 	);
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		alignItems: 'center',
+	},
+
+	input: {
+		margin: 10,
+		maxHeight: 250,
+	},
+});
 
 export default MealsScreen;
 

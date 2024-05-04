@@ -43,3 +43,5 @@ android
 ios
 
 firebase_admin.json
+
+package-lock.json
