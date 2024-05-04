@@ -2,11 +2,17 @@ import React, { createContext, useState, useEffect } 	from 'react';
 import { NavigationContainer } 							from '@react-navigation/native';
 import { auth } 										from './firebaseConfig';
 import { onAuthStateChanged } 							from 'firebase/auth';
-import { View, TextInput, Button, StyleSheet, Text } 	from 'react-native';
 
 import BottomTabNavigator 		from './components/BottomTabNavigator';
 import AuthStack 				from './components/AuthStack';
 import Record 					from './components/Record';
+
+import * as eva from '@eva-design/eva';
+import { ApplicationProvider } from '@ui-kitten/components';
+
+import {  default as theme  } from './theme.json';
+
+import { Layout } from '@ui-kitten/components';
 
 // Creating a context for authentication
 export const AuthContext = createContext({ user: null, isLoggedIn: false });
@@ -17,7 +23,7 @@ const App = () => {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 	// Effect hook to handle authentication state changes
-	
+
 	useEffect(() => {
 		const unsubscribe = onAuthStateChanged(auth, (user) => {
 
@@ -36,7 +42,7 @@ const App = () => {
 		return () => unsubscribe();
 
 	}, []);
-	
+
 
 	const [speechText, setSpeechText] = useState("");
 	const speech = (
@@ -94,18 +100,16 @@ const App = () => {
 		</View>
 	);
 
-	const authorization = (
-		// Provide auth context to children
-		<AuthContext.Provider value={{ user, isLoggedIn }}>
-			<NavigationContainer>
-				{/* Render different navigators based on auth state */}
-				{isLoggedIn ? <BottomTabNavigator /> : <AuthStack />}
-
-			</NavigationContainer>
-		</AuthContext.Provider>
-	);
-
-	return authorization;
+  return (
+    <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
+      <AuthContext.Provider value={{ user, isLoggedIn }}>
+        <NavigationContainer>
+          {/* Render different navigators based on auth state */}
+          {isLoggedIn ? <BottomTabNavigator /> : <AuthStack />}
+        </NavigationContainer>
+      </AuthContext.Provider>
+    </ApplicationProvider>
+  );
 };
 
 export default App;
