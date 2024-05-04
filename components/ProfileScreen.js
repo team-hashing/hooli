@@ -5,6 +5,7 @@ import { auth } from '../firebaseConfig';
 import { useNavigation } from '@react-navigation/native';
 import { useFocusEffect } from '@react-navigation/native';
 import { settings } from 'firebase/analytics';
+import { View } from '@gluestack-ui/themed';
   
 
 const ProfileScreen = () => {
@@ -33,31 +34,43 @@ const ProfileScreen = () => {
   return (
     <Layout style={styles.container}>
       <Avatar style={styles.avatar} source={require('../assets/avatar.png')} />
-      <Text category='h1' style={styles.text}>Name: {user.displayName}</Text>
-      <Text category='s1' style={styles.text}>Email: {user.email}</Text>
-     {/* <Button style={styles.button} appearance='outline' status='info' onPress={() => navigation.navigate('EditProfile')}>Edit Profile</Button>
-     <Divider style={styles.divider} />
-      <Text category='h6' style={styles.text}>Settings</Text>
-      <Button style={styles.button} appearance='outline' status='info' onPress={toggleModalChangePassword}>Change Password</Button>
-      <Modal visible={visibleChangePassword} backdropStyle={styles.backdrop} onBackdropPress={toggleModalChangePassword}>
-        <Card disabled={true}>
-          <Text category='h6'>Change Password</Text>
-          <Input placeholder='New Password' value={password} onChangeText={setPassword} secureTextEntry={true} />
-          <Input placeholder='Confirm Password' value={confirmPassword} onChangeText={setConfirmPassword} secureTextEntry={true} />
-          <Button style={styles.button} appearance='outline' status='success' onPress={toggleModalChangePassword}>Cancel</Button>
-          <Button style={styles.button} status='success' onPress={handlePasswordChange}>Change Password</Button>
+      <Text category='h1' style={styles.text}>{user.displayName}</Text>
+      <Text category='s1' style={styles.text}>{user.email}</Text>
+      <Divider style={styles.divider} />
+      <Layout>
+        <View style={styles.rowView}>
+        {/* Medals section */}
+        <Card style={styles.card}>
+          <View style={styles.cardView}>
+            <Icon name='award-outline' fill='#ffd700' style={{ width: 25, height: 25 }} />
+            <Text category='h6'>123</Text>
+          </View>
         </Card>
-      </Modal>
-      <Button style={styles.button} appearance='outline' status='danger' onPress={handleSignOut}>Sign Out</Button>
-      <Button style={styles.button} status='danger' onPress={toggleModalDelete}>Delete Account</Button>
-      <Modal visible={visibleDelete} backdropStyle={styles.backdrop} onBackdropPress={toggleModalDelete}>
-        <Card disabled={true}>
-          <Text category='h6'>Are you sure you want to delete your account?</Text>
-          <Button style={styles.button} appearance='outline' status='info' onPress={toggleModalDelete}>Cancel</Button>
-          <Button style={styles.button} status='danger' onPress={handleDelete}>Confirm</Button>
+        {/* Streak section */}
+        <Card style={styles.card}>
+          <View style={styles.cardView}>
+            <Icon name='flash-outline' fill='#EAA24C' style={{ width: 25, height: 25 }} />
+            <Text category='h6'>33</Text>
+          </View>
         </Card>
-      </Modal> */}
-
+        </View>
+        <View style={styles.rowView}>
+        {/* Points section */}
+        <Card style={styles.card}>
+          <View style={styles.cardView}>
+            <Icon name='trending-up-outline' fill='#EA644C' style={{ width: 25, height: 25 }} />
+            <Text category='h6'>1328</Text>
+          </View>
+        </Card>
+        {/* Challenges section */}
+        <Card style={styles.card}>
+          <View style={styles.cardView}>
+            <Icon name='checkmark-circle-outline' fill='#5EB904' style={{ width: 25, height: 25 }} />
+            <Text category='h6'>123</Text>
+          </View>
+        </Card>
+        </View>
+      </Layout>
     </Layout>
   );
 };
@@ -65,7 +78,6 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
     padding: 10,
   },
@@ -82,6 +94,26 @@ const styles = StyleSheet.create({
     height: 25,
     alignSelf: 'center',
     margin: 20
+  },
+  divider: {
+    width: '70%',
+    marginVertical: 10,
+  },
+  card: {
+    borderRadius: 10,
+    width: '40%',
+    margin: 10,
+  },
+  cardView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 5,
+  },
+  rowView: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    width: '100%'
   },
 });
 

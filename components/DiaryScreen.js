@@ -18,7 +18,9 @@ const DiaryScreen = () => {
 
 
 	const generateContent = async () => {
-		navigation.navigate('Wizard', { text: text });
+		textCopy = text;
+		setText('');
+		navigation.navigate('Wizard', { text: textCopy });
 	};
 
 	return (
@@ -28,7 +30,6 @@ const DiaryScreen = () => {
 				<Text style={styles.message}>to become more</Text>
 				<Text style={styles.message}>eco-friendly...</Text>
 			</Layout>
-			{loading && <ActivityIndicator size="large" color="#0000ff" />}
 			{data && <Text>{data.message}</Text>}
         	<Layout style={styles.inputContainer}>
 			<Input
@@ -77,7 +78,7 @@ const styles = StyleSheet.create({
 		flexGrow: 1,
 		margin: 20,
 		borderRadius: 20,
-		maxHeight: 500,
+		maxHeight: 450,
 	},
 	messageContainer: {
 		flex: 1,

@@ -95,7 +95,6 @@ const ChallengeScreen = () => {
 
     const renderItem = ({ item: challenge }) => {
         const handleCheckboxChange = async (challenge) => {
-            console.log("C completo? ", challenge.isCompleted);
             const userId = auth.currentUser.uid;
             if (challenge.isCompleted) {
                 await incompleteChallenge(userId, challenge.experienceId, challenge.id);
