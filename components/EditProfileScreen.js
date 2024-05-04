@@ -11,11 +11,15 @@ const EditProfileScreen = ({ navigation }) => {
   const [name, setName] = useState(user.displayName);
   const [photoURL, setPhotoURL] = useState(user.photoURL);
 
+  console.log(user);
+  console.log(photoURL);
+  console.log(name);
+
   const handleEditProfile = async () => {
-    await handleUpdateProfile(user, {
-      displayName: name,
-      photoURL: photoURL
-    });
+    await handleUpdateProfile(
+      name,
+      photoURL
+    );
 
     
     Alert.alert('Success', 'Your profile has been updated.');

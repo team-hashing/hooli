@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Alert } from 'react-native';
 import { StyleSheet } from 'react-native';
-import { ScrollView } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { HOST } from '@env'
+import { Layout, Text, Card, List } from '@ui-kitten/components';
+
 
 
 const ChallengeScreen = () => {
@@ -58,13 +58,11 @@ const ChallengeScreen = () => {
         );
     };
 
-    return (
-        <GestureHandlerRootView style={styles.container}>
-            <ScrollView>
-                {experiences.map((experience, index) => (
-                    Array.isArray(experience.future_challenges) && experience.future_challenges.map((challenge, challengeIndex) => (
-                        <Swipeable
-                            key={`${index}-${challengeIndex}`}
+
+  const challenges = experiences.flatMap(experience => experience.future_challenges);
+
+  const renderItem = ({ item: challenge }) => (
+    <Swipeable
                             renderRightActions={() => renderRightAction(challenge.id)}
                             onSwipeableOpen={(state) => {
                                 if (state.swipeDirection === 'right') {
@@ -72,15 +70,22 @@ const ChallengeScreen = () => {
                                 }
                             }}
                         >
-                            <View style={styles.challengeContainer}>
-                                <Text style={styles.challengeTitle}>{challenge.challenge}</Text>
-                                <Text style={styles.challengeDescription}>{challenge.challenge_description}</Text>
-                                <Text style={styles.challengeDifficulty}>Difficulty: {challenge.challenge_difficulty}</Text>
-                            </View>
-                        </Swipeable>
-                    ))
-                ))}
-            </ScrollView>
+        <Card style={styles.challengeContainer}>
+            <Text style={styles.challengeTitle}>{challenge.challenge}</Text>
+            <Text style={styles.challengeDescription}>{challenge.challenge_description}</Text>
+            <Text style={styles.challengeDifficulty}>Difficulty: {challenge.challenge_difficulty}</Text>
+        </Card>
+    </Swipeable>
+  );
+
+    return (
+        <GestureHandlerRootView style={styles.container}>
+            <Layout>
+                <List
+                    data={challenges}
+                    renderItem={renderItem}
+                />
+            </Layout>
         </GestureHandlerRootView>
     );
 };
@@ -88,18 +93,12 @@ const ChallengeScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 10,
         backgroundColor: '#f5f5f5',
+        padding: 10,
     },
     challengeContainer: {
-        marginVertical: 10,
-        padding: 15,
+        marginVertical: 5,
         borderRadius: 10,
-        backgroundColor: '#fff',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.3,
-        shadowRadius: 2,
         elevation: 3,
     },
     challengeTitle: {
@@ -120,11 +119,17 @@ const styles = StyleSheet.create({
         backgroundColor: 'red',
         justifyContent: 'center',
         alignItems: 'center',
-        width: 100,
+        width: '100%',
+        marginVertical: 5,
+        borderRadius: 10,
+        paddingLeft: '70%',
+        marginLeft: '-70%',
+        
     },
     deleteButtonText: {
         color: 'white',
         fontWeight: '600',
+        textAlign: 'right',
     },
 });
 
