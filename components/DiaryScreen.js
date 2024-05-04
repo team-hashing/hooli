@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { Button, Input, Layout, Icon, Text } from '@ui-kitten/components';
-import { HOST } from '@env'
-import { auth } from '../firebaseConfig';
+import { useNavigation } from '@react-navigation/native';
 
 
 
@@ -15,30 +14,11 @@ const DiaryScreen = () => {
 	const [loading, setLoading] = useState(false);
 	const [data, setData] = useState(null);
 
+	const navigation = useNavigation();
+
 
 	const generateContent = async () => {
-		setLoading(true);
-		try {
-			const userId = auth.currentUser.uid;
-
-			const response = await fetch(`http://${HOST}:3000/generate`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					text: text,
-					userId: userId,
-				}),
-			});
-
-			const data = await response.json();
-			setData(data);
-		} catch (error) {
-			Alert.alert('Error', error.message);
-		} finally {
-			setLoading(false);
-		}
+		navigation.navigate('Wizard', { text: text });
 	};
 
 	return (

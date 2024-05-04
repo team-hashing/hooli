@@ -127,8 +127,13 @@ const ChallengeScreen = () => {
 
     return (
         <GestureHandlerRootView style={styles.container}>
-            <Layout>
+            <Layout style={styles.layoutContainer}>
+                {challenges.length === 0 && (
+                <>
+                    <Text style={styles.ChallengesNotFoundText}>No challenges found</Text>
+                </>)}
                 <List
+                    style={styles.list}
                     data={challenges}
                     renderItem={renderItem}
                     key={key}
@@ -141,8 +146,6 @@ const ChallengeScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f5f5f5',
-        padding: 10,
     },
     challengeContainer: {
         marginVertical: 5,
@@ -181,6 +184,18 @@ const styles = StyleSheet.create({
     },
     checkBox: {
         alignSelf: 'flex-end',
+    },
+    ChallengesNotFoundText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginTop: 20,
+        color: '#999',
+    },
+    layoutContainer: {  
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });
 

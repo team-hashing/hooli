@@ -25,11 +25,7 @@ const ProfileScreen = () => {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-          <Button appearance='ghost' status='info' onPress={() => navigation.navigate('ProfileConfig')}>
-            <Layout style={styles.configButtonView}>
-              <Icon name='settings-outline' style={styles.settingsIcon} />
-            </Layout>
-          </Button>
+        <Icon name='settings-outline' style={styles.settingsIcon}  status='info' onPress={() => navigation.navigate('ProfileConfig')}/>
       ),
     });
   }, [navigation]);
@@ -61,9 +57,6 @@ const ProfileScreen = () => {
           <Button style={styles.button} status='danger' onPress={handleDelete}>Confirm</Button>
         </Card>
       </Modal> */}
-      <Button onPress={() => navigation.navigate('ProfileConfig')}>
-        Go to Profile Configuration
-      </Button>
 
     </Layout>
   );
@@ -84,16 +77,11 @@ const styles = StyleSheet.create({
   text: {
     marginBottom: 15,
   },
-  configButtonView: {
-    backgroundColor: 'red',
-  },
-  backdrop: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
   settingsIcon: {
     width: 25,
     height: 25,
     alignSelf: 'center',
+    margin: 20
   },
 });
 

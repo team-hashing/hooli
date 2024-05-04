@@ -15,7 +15,7 @@ const ActivityScreen = () => {
             .catch(error => console.error(error));
             setExperiences(experiences);
     };
-    
+
     const callback = React.useCallback(() => {
         const userId = auth.currentUser.uid;
         getExperiencesByDate(userId, new Date().toISOString().split('T')[0])
@@ -30,7 +30,7 @@ const ActivityScreen = () => {
           <Text style={styles.activityTitle}>{activity.activity}</Text>
           <Text style={styles.activityDescription}>{activity.activity_description}</Text>
           <Text style={styles.feedbackMessage}>{activity.feedback_message}</Text>
-          <Text style={activity.eco_friendly ? styles.ecoFriendly : styles.notEcoFriendly}>
+          <Text style={styles.ecoFriendlyText}  status={activity.eco_friendly? 'primary':'danger'}>
             {activity.eco_friendly ? 'Eco-friendly' : 'Not eco-friendly'}
           </Text>
         </Card>
@@ -42,7 +42,13 @@ const ActivityScreen = () => {
     return (
         <Layout style={styles.container}>
             <DayPickerComponent onDateChange={handleDateChange} />
+                {activities.length === 0 && (
+                <>
+                    <Text style={styles.ActivitiesNotFoundText}>No activities found</Text>
+                </>
+                )}
             <List
+                style={styles.list}
                 data={activities}
                 renderItem={renderItem}
             />
@@ -54,7 +60,6 @@ const ActivityScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f5f5f5',
     },
     activityContainer: {
         margin: 10,
@@ -76,15 +81,19 @@ const styles = StyleSheet.create({
         color: '#999',
         marginTop: 10,
     },
-    ecoFriendly: {
+    ecoFriendlyText: {
         fontSize: 14,
-        color: 'green',
         marginTop: 10,
     },
-    notEcoFriendly: {
-        fontSize: 14,
-        color: 'red',
-        marginTop: 10,
+    list: {
+        backgroundColor: 'transparent',
+    },
+    ActivitiesNotFoundText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginTop: 20,
+        color: '#999',
     },
 });
 
