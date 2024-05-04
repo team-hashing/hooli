@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
 import { StyleSheet } from 'react-native';
-import { ScrollView } from 'react-native';
 import { HOST } from '@env'
+import { Layout, Text, Card, List } from '@ui-kitten/components';
 import {auth} from '../firebaseConfig';
 
 const ActivityScreen = () => {
@@ -27,40 +26,40 @@ const ActivityScreen = () => {
         console.log(experiences);
     }, []);
 
+    const renderItem = ({ item: activity }) => (
+        <Card style={styles.activityContainer}>
+          <Text style={styles.activityTitle}>{activity.activity}</Text>
+          <Text style={styles.activityDescription}>{activity.activity_description}</Text>
+          <Text style={styles.feedbackMessage}>{activity.feedback_message}</Text>
+          <Text style={activity.eco_friendly ? styles.ecoFriendly : styles.notEcoFriendly}>
+            {activity.eco_friendly ? 'Eco-friendly' : 'Not eco-friendly'}
+          </Text>
+        </Card>
+      );
+
+    const activities = experiences.flatMap(experience => experience.activities);
+
+
     return (
-        <ScrollView style={styles.container}>
-            {experiences.map((experience, index) => (
-                Array.isArray(experience.activities) && experience.activities.map((activity, activityIndex) => (
-                    <View key={`${index}-${activityIndex}`} style={styles.activityContainer}>
-                        <Text style={styles.activityTitle}>{activity.activity}</Text>
-                        <Text style={styles.activityDescription}>{activity.activity_description}</Text>
-                        <Text style={styles.feedbackMessage}>{activity.feedback_message}</Text>
-                        <Text style={activity.eco_friendly ? styles.ecoFriendly : styles.notEcoFriendly}>
-                            {activity.eco_friendly ? 'Eco-friendly' : 'Not eco-friendly'}
-                        </Text>
-                    </View>
-                ))
-            ))}
-        </ScrollView>
-    );
+        <Layout style={styles.container}>
+            <List
+                data={activities}
+                renderItem={renderItem}
+            />
+        </Layout>
+      );
 
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 10,
         backgroundColor: '#f5f5f5',
     },
     activityContainer: {
-        marginVertical: 10,
-        padding: 15,
+        margin: 10,
+        marginVertical: 5,
         borderRadius: 10,
-        backgroundColor: '#fff',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.3,
-        shadowRadius: 2,
         elevation: 3,
     },
     activityTitle: {

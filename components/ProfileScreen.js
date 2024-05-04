@@ -1,70 +1,45 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Alert } from 'react-native';
-import { Button, Layout, Avatar, Divider, Text, Modal, Card, Input } from '@ui-kitten/components';
+import { Button, Layout, Avatar, Divider, Text, Modal, Card, Input, Icon } from '@ui-kitten/components';
 import { auth } from '../firebaseConfig';
-import { authSignOut } from '../businessLogic/user/authSignOut';
-import { handleUpdatePassword } from '../businessLogic/user/handleUpdatePassword';
-import { handleDeleteUser } from '../businessLogic/user/handleDeleteUser';
 import { useNavigation } from '@react-navigation/native';
-import { getAuth } from 'firebase/auth';
+import { useFocusEffect } from '@react-navigation/native';
+import { settings } from 'firebase/analytics';
   
-const handleChangePassword = async (newPassword) => {
-  // Implement the logic to change the password
-  await handleUpdatePassword(newPassword);
-  Alert.alert('Success', 'Your password has been changed.');
-};
-
-const handleDeleteAccount = async () => {
-  // Implement the logic to delete the account
-  await handleDeleteUser();
-};
-
-const handleSignOut = async () => {
-  // Implement the logic to sign out
-  await authSignOut();
-};
 
 const ProfileScreen = () => {
   const navigation = useNavigation();
   const [user, setUser] = useState(auth.currentUser);
-  const [visibleDelete, setVisibleDelete] = useState(false);
-  const [visibleChangePassword, setVisibleChangePassword] = useState(false);
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchUser = async () => {
+        await auth.currentUser.reload();
+        const { displayName, email, photoURL } = auth.currentUser;
+        setUser({ displayName, email, photoURL });
+      };
   
+      fetchUser();
+    }, [])
+  );
   useEffect(() => {
-    const auth = getAuth();
-    setUser(auth.currentUser);
-  }, []);
-
-  const toggleModalDelete = () => {
-    setVisibleDelete(!visibleDelete);
-  };
-
-  const toggleModalChangePassword = () => {
-    setVisibleChangePassword(!visibleChangePassword);
-  };
-
-  const handleDelete = async () => {
-    toggleModalDelete();
-    await handleDeleteAccount();
-  };
-
-  const handlePasswordChange = async () => {
-    if (password === confirmPassword) {
-      await handleChangePassword(password);
-      toggleModalChangePassword();
-    } else {
-      console.error('Passwords do not match');
-    }
-  };
+    navigation.setOptions({
+      headerRight: () => (
+          <Button appearance='ghost' status='info' onPress={() => navigation.navigate('ProfileConfig')}>
+            <Layout style={styles.configButtonView}>
+              <Icon name='settings-outline' style={styles.settingsIcon} />
+            </Layout>
+          </Button>
+      ),
+    });
+  }, [navigation]);
 
   return (
     <Layout style={styles.container}>
       <Avatar style={styles.avatar} source={require('../assets/avatar.png')} />
       <Text category='h1' style={styles.text}>Name: {user.displayName}</Text>
       <Text category='s1' style={styles.text}>Email: {user.email}</Text>
-      <Button style={styles.button} appearance='outline' status='info' onPress={() => navigation.navigate('EditProfile')}>Edit Profile</Button>
+     {/* <Button style={styles.button} appearance='outline' status='info' onPress={() => navigation.navigate('EditProfile')}>Edit Profile</Button>
      <Divider style={styles.divider} />
       <Text category='h6' style={styles.text}>Settings</Text>
       <Button style={styles.button} appearance='outline' status='info' onPress={toggleModalChangePassword}>Change Password</Button>
@@ -85,7 +60,11 @@ const ProfileScreen = () => {
           <Button style={styles.button} appearance='outline' status='info' onPress={toggleModalDelete}>Cancel</Button>
           <Button style={styles.button} status='danger' onPress={handleDelete}>Confirm</Button>
         </Card>
-      </Modal>
+      </Modal> */}
+      <Button onPress={() => navigation.navigate('ProfileConfig')}>
+        Go to Profile Configuration
+      </Button>
+
     </Layout>
   );
 };
@@ -105,18 +84,16 @@ const styles = StyleSheet.create({
   text: {
     marginBottom: 15,
   },
-  button: {
-    marginVertical: 10,
-    width: '100%',
-  },
-  divider: {
-    width: '100%',
-    height: 1,
-    backgroundColor: '#E4E4E4',
-    marginVertical: 15,
+  configButtonView: {
+    backgroundColor: 'red',
   },
   backdrop: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  settingsIcon: {
+    width: 25,
+    height: 25,
+    alignSelf: 'center',
   },
 });
 

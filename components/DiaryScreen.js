@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { StyleSheet, Alert, ActivityIndicator } from 'react-native';
-import { Button, Input, Layout, Icon } from '@ui-kitten/components';
+import { Button, Input, Layout, Icon, Text } from '@ui-kitten/components';
 import { HOST } from '@env'
 import { auth } from '../firebaseConfig';
+
 
 
 const SendIcon = (props) => (
@@ -59,6 +60,7 @@ const DiaryScreen = () => {
 				  }
 			/>
 			{loading && <ActivityIndicator size="large" color="#0000ff" />}
+			{data && <Text>{data.message}</Text>}
 		</Layout>
 	);
 }
