@@ -10,11 +10,11 @@ import getExperiencesByDate from '../businessLogic/experiences/getExperiencesByD
 import { useFocusEffect } from '@react-navigation/native';
 import completeChallenge from '../businessLogic/experiences/completeChallenge';
 import incompleteChallenge from '../businessLogic/experiences/incompleteChallenge';
+import deleteChallenge from '../businessLogic/experiences/deleteChallenge';
 import { set } from '@gluestack-style/react';
 
 const ChallengeScreen = () => {
     const [experiences, setExperiences] = useState([]);
-    const [key, setKey] = useState(0);
 
 
 
@@ -43,50 +43,27 @@ const ChallengeScreen = () => {
     useFocusEffect(callback);
 
 
-    const deleteChallenge = (experienceId, challengeId) => {
+    const handleDelete = (experienceId, challengeId) => {
         const userId = auth.currentUser.uid;
+        deleteChallenge(userId, experienceId, challengeId);
+        console.log("Challenge deleted successfully")
+        setExperiences(experiences.map(experience => {
+            if (experience.id === experienceId) {
+                return {
+                    ...experience,
+                    future_challenges: experience.future_challenges.filter(challenge => challenge.id !== challengeId),
+                };
+            }
+            return experience;
+        }));
 
-        fetch(`http://${HOST}:3000/deleteChallenge`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                userId: userId,
-                experienceId: experienceId,
-                challengeId: challengeId,
-            }),
-        })
-            .then(response => {
-                if (!response.ok) {
-                    // If the server responds with a status code other than 200, throw an error
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.message === 'Challenge deleted successfully') {
-                    // If the challenge was deleted successfully, remove it from the experiences array
-                    setExperiences(experiences.map(experience => {
-                        if (experience.id === experienceId) {
-                            return {
-                                ...experience,
-                                future_challenges: experience.future_challenges.filter(challenge => challenge.id !== challengeId),
-                            };
-                        }
-                        return experience;
-                    }));
-                } else {
-                    // If the server responded with a message other than 'Challenge deleted successfully', log the message
-                    console.error(data.message);
-                }
-            })
-            .catch(error => console.error(error));
+        console.log("Challenge not deleted");
     };
+
 
     const renderRightAction = (experienceId, challengeId) => {
         return (
-            <RectButton style={styles.deleteButton} onPress={() => deleteChallenge(experienceId, challengeId)}>
+            <RectButton style={styles.deleteButton} onPress={() => handleDelete(experienceId, challengeId)}>
                 <Text style={styles.deleteButtonText}>Delete</Text>
             </RectButton>
         );
@@ -129,14 +106,13 @@ const ChallengeScreen = () => {
         <GestureHandlerRootView style={styles.container}>
             <Layout style={styles.layoutContainer}>
                 {challenges.length === 0 && (
-                <>
-                    <Text style={styles.ChallengesNotFoundText}>No challenges found</Text>
-                </>)}
+                    <>
+                        <Text style={styles.ChallengesNotFoundText}>No challenges found</Text>
+                    </>)}
                 <List
                     style={styles.list}
                     data={challenges}
                     renderItem={renderItem}
-                    key={key}
                 />
             </Layout>
         </GestureHandlerRootView>
@@ -192,7 +168,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         color: '#999',
     },
-    layoutContainer: {  
+    layoutContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
