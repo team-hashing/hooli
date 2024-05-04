@@ -6,13 +6,14 @@ import { RectButton } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { HOST } from '@env'
+import { auth } from '../firebaseConfig';
 
 
 const ChallengeScreen = () => {
     const [experiences, setExperiences] = useState([]);
 
     useEffect(() => {
-        const userId = '8eo4fLDnMhhodi2mIWsq5i1ahO82';
+        const userId = auth.currentUser.uid;
 
         fetch(`http://${HOST}:3000/getExperiences`, {
             method: 'POST',
