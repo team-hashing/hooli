@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { Button, Input, Layout, Icon, Text } from '@ui-kitten/components';
 import { HOST } from '@env'
+import { auth } from '../firebaseConfig';
 
 
 
@@ -18,7 +19,7 @@ const DiaryScreen = () => {
 	const generateContent = async () => {
 		setLoading(true);
 		try {
-			const userId = '8eo4fLDnMhhodi2mIWsq5i1ahO82';
+			const userId = auth.currentUser.uid;
 
 			const response = await fetch(`http://${HOST}:3000/generate`, {
 				method: 'POST',

@@ -5,14 +5,15 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { HOST } from '@env'
 import { Layout, Text, Card, List } from '@ui-kitten/components';
-
+import { auth } from '../firebaseConfig';
 
 
 const ChallengeScreen = () => {
     const [experiences, setExperiences] = useState([]);
 
     useEffect(() => {
-        const userId = '8eo4fLDnMhhodi2mIWsq5i1ahO82';
+        const userId = auth.currentUser.uid;
+        console.log(userId);
 
         fetch(`http://${HOST}:3000/getExperiences`, {
             method: 'POST',
@@ -26,10 +27,11 @@ const ChallengeScreen = () => {
             .then(response => response.json())
             .then(data => setExperiences(data))
             .catch(error => console.error(error));
+        console.log(experiences);
     }, []);
 
-    const deleteChallenge = (challengeId) => {
-        const userId = '8eo4fLDnMhhodi2mIWsq5i1ahO82';
+    const deleteChallenge = (experienceId, challengeId) => {
+        const userId = auth.currentUser.uid;
 
         fetch(`http://${HOST}:3000/deleteChallenge`, {
             method: 'POST',
@@ -38,21 +40,41 @@ const ChallengeScreen = () => {
             },
             body: JSON.stringify({
                 userId: userId,
+                experienceId: experienceId,
                 challengeId: challengeId,
             }),
         })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    // If the server responds with a status code other than 200, throw an error
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.message === 'Challenge deleted successfully') {
-                    setExperiences(experiences.filter(experience => experience.id !== challengeId));
+                    // If the challenge was deleted successfully, remove it from the experiences array
+                    setExperiences(experiences.map(experience => {
+                        if (experience.id === experienceId) {
+                            return {
+                                ...experience,
+                                future_challenges: experience.future_challenges.filter(challenge => challenge.id !== challengeId),
+                            };
+                        }
+                        return experience;
+                    }));
+                } else {
+                    // If the server responded with a message other than 'Challenge deleted successfully', log the message
+                    console.error(data.message);
                 }
             })
             .catch(error => console.error(error));
     };
 
-    const renderRightAction = (challengeId) => {
+    const renderRightAction = (experienceId, challengeId) => {
+        console.log(challengeId);
         return (
-            <RectButton style={styles.deleteButton} onPress={() => deleteChallenge(challengeId)}>
+            <RectButton style={styles.deleteButton} onPress={() => deleteChallenge(experienceId, challengeId)}>
                 <Text style={styles.deleteButtonText}>Delete</Text>
             </RectButton>
         );
@@ -62,14 +84,7 @@ const ChallengeScreen = () => {
   const challenges = experiences.flatMap(experience => experience.future_challenges);
 
   const renderItem = ({ item: challenge }) => (
-    <Swipeable
-                            renderRightActions={() => renderRightAction(challenge.id)}
-                            onSwipeableOpen={(state) => {
-                                if (state.swipeDirection === 'right') {
-                                    deleteChallenge(challenge.id);
-                                }
-                            }}
-                        >
+    <Swipeable renderRightActions={() => renderRightAction(experience.id, challenge.id)} >
         <Card style={styles.challengeContainer}>
             <Text style={styles.challengeTitle}>{challenge.challenge}</Text>
             <Text style={styles.challengeDescription}>{challenge.challenge_description}</Text>

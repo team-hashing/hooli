@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { HOST } from '@env'
 import { Layout, Text, Card, List } from '@ui-kitten/components';
-
+import {auth} from '../firebaseConfig';
 
 const ActivityScreen = () => {
     const [experiences, setExperiences] = useState([]);
 
     useEffect(() => {
-        const userId = '8eo4fLDnMhhodi2mIWsq5i1ahO82';
+        const userId = auth.currentUser.uid;
+        console.log(userId);
 
         fetch(`http://${HOST}:3000/getExperiences`, {
             method: 'POST',
@@ -22,6 +23,7 @@ const ActivityScreen = () => {
             .then(response => response.json())
             .then(data => setExperiences(data))
             .catch(error => console.error(error));
+        console.log(experiences);
     }, []);
 
     const renderItem = ({ item: activity }) => (
