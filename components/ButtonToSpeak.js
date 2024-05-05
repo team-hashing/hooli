@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Button, Text, View } from 'react-native';
-import Voice from 'react-native-voice';
+import Voice from '@react-native-voice/voice';
 import { StyleSheet } from 'react-native';
 
 export default function ButtonToSpeak() {

@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Hooli",
-    "slug": "Hooli",
+    "slug": "hooli",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -42,9 +42,10 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "3c26ce12-d4eb-4d48-8d31-b917489393f3"
+        "projectId": "01cfb5fc-59f4-4450-bac6-1da4fe138e58"
       }
-    }
+    },
+    "owner": "danivs10"
   },
   "ios": {
     "supportsTablet": true,
