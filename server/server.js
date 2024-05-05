@@ -7,7 +7,7 @@ const { v4: uuidv4 } = require('uuid');
 
 
 app.get('/', (req, res) => {
-	res.send('Hello World!');
+    res.send('Hello World!');
 });
 
 app.listen(port, '0.0.0.0', () => {
@@ -15,9 +15,9 @@ app.listen(port, '0.0.0.0', () => {
 });
 /*
 app.get('/generate', async (req, res) => {
-	const text = req.query.text;
-	const response = await generateContent(text);
-	res.send(response);
+    const text = req.query.text;
+    const response = await generateContent(text);
+    res.send(response);
 });
 */
 var admin = require("firebase-admin");
@@ -25,7 +25,7 @@ var admin = require("firebase-admin");
 var serviceAccount = require("../firebase_admin.json");
 
 admin.initializeApp({
-	credential: admin.credential.cert(serviceAccount)
+    credential: admin.credential.cert(serviceAccount)
 });
 
 const db = admin.firestore();
@@ -79,30 +79,43 @@ const _checkForMedals = async (userRef) => {
         // If the user doesn't have the medal and meets the requirements, award the medal
         if (!userData.medals.includes(medal)) {
             if (category && userData.scores[category] >= score) {
+                console.log('Awarding medal:', medal, 'for ', category, ' score: ', userData.scores[category]);
                 await userRef.update({ medals: admin.firestore.FieldValue.arrayUnion(medal) });
+
             } else if (completedChallenges && userData.completedChallenges >= completedChallenges) {
+
                 await userRef.update({ medals: admin.firestore.FieldValue.arrayUnion(medal) });
             } else if (score) {
-                // Check if the user has a score of 50 in any two categories
-                let categoriesWithScore50 = 0;
-                for (const category in userData.scores) {
-                    if (userData.scores[category] >= score) {
-                        categoriesWithScore50++;
-                    }
+                if (category) {
+                    continue;
                 }
-                if (categoriesWithScore50 >= 2) {
-                    await userRef.update({ medals: admin.firestore.FieldValue.arrayUnion(medal) });
+                else {
+                    // Check if the user has a score of 50 in any two categories
+                    let categoriesWithScore50 = 0;
+                    for (const category in userData.scores) {
+                        if (userData.scores[category] >= score) {
+                            categoriesWithScore50++;
+                        }
+                    }
+                    if (categoriesWithScore50 >= 2) {
+                        await userRef.update({ medals: admin.firestore.FieldValue.arrayUnion(medal) });
+                    }
                 }
             }
         }
     }
 }
 
-const _checkStreak = (lastDate) => {
+const _checkStreakYesterday = (lastDate) => {
     const today = new Date();
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
     return lastDate === yesterday.toISOString().split('T')[0];
+}
+
+const _checkStreakToday = (lastDate) => {
+    const today = new Date().toISOString().split('T')[0];
+    return lastDate === today;
 }
 
 const _addStreak = async (userRef) => {
@@ -110,12 +123,13 @@ const _addStreak = async (userRef) => {
     const userData = userSnapshot.data();
 
     const today = new Date().toISOString().split('T')[0];
-    if (_checkStreak(userData.lastDate)) {
+    if (_checkStreakYesterday(userData.lastDate)) {
         await userRef.update({
             streak: admin.firestore.FieldValue.increment(1),
             lastDate: today
         });
-    } else {
+    }
+    else if (!_checkStreakToday(userData.lastDate)) {
         await userRef.update({
             streak: 1,
             lastDate: today
@@ -165,7 +179,7 @@ app.post('/generate', async (req, res) => {
     for (const category in scores) {
         await userRef.update({ [`scores.${category}`]: admin.firestore.FieldValue.increment(scores[category]) });
     }
-    
+
     try {
         // Check for medals
         await _checkForMedals(userRef);
@@ -186,33 +200,33 @@ app.post('/generate', async (req, res) => {
 
 
 app.post('/getExperiences', async (req, res) => {
-	const userId = req.body.userId;
+    const userId = req.body.userId;
 
-	// Get a reference to the user
-	const userRef = db.collection('users').doc(userId);
+    // Get a reference to the user
+    const userRef = db.collection('users').doc(userId);
 
-	// Query the experiences collection for experiences where the user field is equal to the user reference
-	const snapshot = await db.collection('experiences').where('user', '==', userRef).get();
+    // Query the experiences collection for experiences where the user field is equal to the user reference
+    const snapshot = await db.collection('experiences').where('user', '==', userRef).get();
 
-	// Map over the documents in the snapshot to get the data for each experience
-	const experiences = snapshot.docs.map(doc => doc.data());
+    // Map over the documents in the snapshot to get the data for each experience
+    const experiences = snapshot.docs.map(doc => doc.data());
 
-	// Send the experiences as the response
-	res.send(experiences);
+    // Send the experiences as the response
+    res.send(experiences);
 });
 
 app.post('/getExperiencesByDate', async (req, res) => {
     const { userId, date } = req.body;
 
-	const targetDate = date;
+    const targetDate = date;
 
     // Get a reference to the user
     const userRef = db.collection('users').doc(userId);
 
     // Query the experiences collection for experiences where the user field is equal to the user reference
     // and the date field is equal to the target date
-	// Query the experiences collection for experiences where the user field is equal to the user reference
-	const snapshot = await db.collection('experiences').where('user', '==', userRef).where('date', '==', targetDate).get();
+    // Query the experiences collection for experiences where the user field is equal to the user reference
+    const snapshot = await db.collection('experiences').where('user', '==', userRef).where('date', '==', targetDate).get();
 
     // Map over the documents in the snapshot to get the data for each experience
     const experiences = snapshot.docs.map(doc => doc.data());
