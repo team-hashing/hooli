@@ -11,6 +11,7 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, '0.0.0.0', () => {
+    console.log(`Server listening at http://localhost:${port}`);
 });
 /*
 app.get('/generate', async (req, res) => {
@@ -27,25 +28,100 @@ admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount)
 });
 
-
-const calculatePoints = (activities) => {
-	// if activity.eco_friendly + 10 points, else -10 points
-	let points = 0;
-	for (let i = 0; i < activities.length; i++) {
-		if (activities[i].eco_friendly) {
-			points += 10;
-		} else {
-			points -= 10;
-		}
-	}
-	return points;
-}
-
-
-
 const db = admin.firestore();
 app.use(express.json());
 
+
+const _calculatePoints = (activities) => {
+    // Initialize scores for each category
+    let scores = {
+        transport: 0,
+        food: 0,
+        energy: 0,
+        waste: 0,
+        water: 0,
+        health: 0
+    };
+
+    // For each activity, add points to the corresponding category
+    for (let i = 0; i < activities.length; i++) {
+        if (activities[i].eco_friendly) {
+            scores[activities[i].category] += 10;
+        } else {
+            scores[activities[i].category] -= 10;
+        }
+    }
+
+    return scores;
+}
+
+const _checkForMedals = async (userRef) => {
+    const userSnapshot = await userRef.get();
+    const userData = userSnapshot.data();
+
+    // Define medals and their requirements
+    const medals = {
+        medal_transport: { category: 'transport', score: 10 },
+        medal_food: { category: 'food', score: 10 },
+        medal_energy: { category: 'energy', score: 10 },
+        medal_waste: { category: 'waste', score: 10 },
+        medal_water: { category: 'water', score: 10 },
+        medal_health: { category: 'health', score: 10 },
+        medal_multi_category: { score: 50 },
+        medal_challenge_master: { completedChallenges: 10 },
+        medal_beginner: { score: 1 }
+    };
+
+    // Check each medal
+    for (const medal in medals) {
+        const { category, score, completedChallenges } = medals[medal];
+
+        // If the user doesn't have the medal and meets the requirements, award the medal
+        if (!userData.medals.includes(medal)) {
+            if (category && userData.scores[category] >= score) {
+                await userRef.update({ medals: admin.firestore.FieldValue.arrayUnion(medal) });
+            } else if (completedChallenges && userData.completedChallenges >= completedChallenges) {
+                await userRef.update({ medals: admin.firestore.FieldValue.arrayUnion(medal) });
+            } else if (score) {
+                // Check if the user has a score of 50 in any two categories
+                let categoriesWithScore50 = 0;
+                for (const category in userData.scores) {
+                    if (userData.scores[category] >= score) {
+                        categoriesWithScore50++;
+                    }
+                }
+                if (categoriesWithScore50 >= 2) {
+                    await userRef.update({ medals: admin.firestore.FieldValue.arrayUnion(medal) });
+                }
+            }
+        }
+    }
+}
+
+const _checkStreak = (lastDate) => {
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    return lastDate === yesterday.toISOString().split('T')[0];
+}
+
+const _addStreak = async (userRef) => {
+    const userSnapshot = await userRef.get();
+    const userData = userSnapshot.data();
+
+    const today = new Date().toISOString().split('T')[0];
+    if (_checkStreak(userData.lastDate)) {
+        await userRef.update({
+            streak: admin.firestore.FieldValue.increment(1),
+            lastDate: today
+        });
+    } else {
+        await userRef.update({
+            streak: 1,
+            lastDate: today
+        });
+    }
+}
 
 app.post('/generate', async (req, res) => {
     const text = req.body.text;
@@ -61,7 +137,19 @@ app.post('/generate', async (req, res) => {
     }
 
     // Calculate points from activities
-    const points = calculatePoints(response.activities);
+    let scores = {
+        transport: 0,
+        food: 0,
+        energy: 0,
+        waste: 0,
+        water: 0,
+        health: 0
+    };
+    if (!response.activities) {
+        response.activities = [];
+    } else {
+        scores = _calculatePoints(response.activities);
+    }
 
     // Save the response as an "experience" object for the user
     const userRef = db.collection('users').doc(userId);
@@ -73,12 +161,29 @@ app.post('/generate', async (req, res) => {
         ...response,
     });
 
+    // Update user's scores
+    for (const category in scores) {
+        await userRef.update({ [`scores.${category}`]: admin.firestore.FieldValue.increment(scores[category]) });
+    }
+    
+    try {
+        // Check for medals
+        await _checkForMedals(userRef);
+    } catch (error) {
+        console.error('Error checking for medals:', error);
+    }
 
-    // Update user's points
-    await userRef.update({ points: admin.firestore.FieldValue.increment(points) });
+    try {
+        // Add streak
+        await _addStreak(userRef);
+    } catch (error) {
+        console.error('Error adding streak:', error);
+    }
+
 
     res.send(response);
 });
+
 
 app.post('/getExperiences', async (req, res) => {
 	const userId = req.body.userId;
@@ -241,4 +346,34 @@ app.post('/incompleteChallenge', async (req, res) => {
     }
 
     res.status(404).send('Challenge not found');
+});
+
+app.post('/getUserAttributes', async (req, res) => {
+    const userId = req.body.userId;
+
+    // Get a reference to the user
+    const userRef = db.collection('users').doc(userId);
+
+    try {
+        // Get the user document
+        const userSnapshot = await userRef.get();
+
+        // Check if the user exists
+        if (!userSnapshot.exists) {
+            res.status(404).send('User not found');
+            return;
+        }
+
+        // Get the user data
+        const userData = userSnapshot.data();
+
+        // Extract the attributes
+        const { completedChallenges, streak, medals, scores } = userData;
+
+        // Send the attributes as the response
+        res.send({ completedChallenges, streak, medals, scores });
+    } catch (error) {
+        console.error('Error getting user attributes:', error);
+        res.status(500).send('Error getting user attributes');
+    }
 });

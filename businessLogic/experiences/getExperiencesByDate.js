@@ -1,4 +1,7 @@
 import { HOST } from '@env';
+import { usersDB } from "../../firebaseConfig";
+import { collection, doc, updateDoc, increment } from "firebase/firestore";
+import { auth } from "../../firebaseConfig";
 
 const getExperiencesByDate = async (userId, date) => {
     try {
