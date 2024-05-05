@@ -4,10 +4,10 @@ import { useTheme } from '@ui-kitten/components';
 import { StyleSheet } from 'react-native';
 import { View } from 'react-native';
 import { Icon } from '@ui-kitten/components';
+import * as Animatable from 'react-native-animatable';
 
 const ResponseWizardPage = ({ data }) => {
     const theme = useTheme();
-
 
       const styles = StyleSheet.create({
         container: {
@@ -58,8 +58,12 @@ const ResponseWizardPage = ({ data }) => {
   return (
     <Layout style={styles.container}>
       <View style={styles.container} >
-        <Text style={styles.ResponseHeader}>YOUR ECO-REVIEW IS READY!</Text>
-        {data && <Text style={styles.ResponseMessage}>{data.message}</Text> }
+        <Animatable.View animation="fadeInLeft" duration={2000}>
+          <Text style={styles.ResponseHeader}>YOUR ECO-REVIEW IS READY!</Text>
+        </Animatable.View>
+        <Animatable.View animation="fadeInLeft" duration={2000} delay={300}>
+          {data && <Text style={styles.ResponseMessage}>{data.message}</Text> }
+        </Animatable.View>
       </View>
       <View style={styles.SwipeContainer}>
         <Text style={styles.SwipeMessage}>Swipe to see your summary</Text>

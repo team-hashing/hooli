@@ -18,6 +18,7 @@ const { Navigator, Screen } = createBottomTabNavigator();
     return (
       <Animatable.View 
         animation={focused ? "flipInY" : ""} 
+        iterationCount={1}
         duration={500} 
         useNativeDriver
       >
@@ -31,7 +32,7 @@ const { Navigator, Screen } = createBottomTabNavigator();
     return (
       <Animatable.View 
         animation={focused ? "jello" : ""} 
-        iterationCount={focused ? "3" : "1"}
+        iterationCount={focused ? 3 : 1}
         duration={500} 
         useNativeDriver
       >
@@ -46,6 +47,7 @@ const { Navigator, Screen } = createBottomTabNavigator();
     return (
       <Animatable.View 
         animation={focused ? "tada" : ""} 
+        iterationCount={1}
         duration={500} 
         useNativeDriver
       >
@@ -60,6 +62,7 @@ const { Navigator, Screen } = createBottomTabNavigator();
     return (
       <Animatable.View 
         animation={focused ? "rotate" : ""} 
+        iterationCount={1}
         duration={500} 
         useNativeDriver
       >
