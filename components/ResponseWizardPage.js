@@ -59,7 +59,7 @@ const ResponseWizardPage = ({ data }) => {
     <Layout style={styles.container}>
       <View style={styles.container} >
         <Text style={styles.ResponseHeader}>YOUR ECO-REVIEW IS READY!</Text>
-        <Text style={styles.ResponseMessage}>{data.message}</Text>
+        {data && <Text style={styles.ResponseMessage}>{data.message}</Text> }
       </View>
       <View style={styles.SwipeContainer}>
         <Text style={styles.SwipeMessage}>Swipe to see your summary</Text>

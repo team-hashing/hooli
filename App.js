@@ -12,6 +12,7 @@ import { EvaIconsPack } from '@ui-kitten/eva-icons';
 
 import {  default as theme  } from './theme.json';
 
+import LoadingScreen from './components/LoadingScreen';
 
 // Creating a context for authentication
 export const AuthContext = createContext({ user: null, isLoggedIn: false });
@@ -20,6 +21,8 @@ const App = () => {
 	// State variables for user and login status
 	const [user, setUser] = useState(null);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
+
 
 	// Effect hook to handle authentication state changes
 	useEffect(() => {
@@ -34,6 +37,9 @@ const App = () => {
 				setUser(null);
 			}
 
+			setTimeout(() => {
+				setIsLoading(false);
+			}, 200);
 		});
 
 		// Cleanup subscription on unmount
@@ -49,8 +55,11 @@ const App = () => {
 		<ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
 		<AuthContext.Provider value={{ user, isLoggedIn }}>
 			<NavigationContainer>
-			{/* Render different navigators based on auth state */}
-			{isLoggedIn ? <BottomTabNavigator /> : <AuthStack />}
+			{ isLoading ? 
+			<LoadingScreen /> :
+			isLoggedIn ? 
+				<BottomTabNavigator /> :
+				 <AuthStack />}
 			</NavigationContainer>
 		</AuthContext.Provider>
 		</ApplicationProvider>

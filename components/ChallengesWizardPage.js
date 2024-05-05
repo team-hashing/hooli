@@ -85,7 +85,7 @@ const ChallengesWizardPage = ({ data }) => {
     <Layout style={styles.container}>
         <Text style={styles.ActivitiesHeader}>NEW CHALLENGES</Text>
             <ScrollView style={styles.ActivityView} contentContainerStyle={{justifyContent: 'center'}}>
-                    {data.future_challenges.map((challenge, index) => (
+                    {data && data.future_challenges.map((challenge, index) => (
                         <View style={styles.outerContainer}>
                             <Card key={index} style={styles.activityContainer}>
                                 <Text style={styles.ActivityMessage}>

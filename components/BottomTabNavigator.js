@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BottomNavigation, BottomNavigationTab, Icon } from '@ui-kitten/components';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import * as Animatable from 'react-native-animatable';
 
 // Import your screens
 import MainPageStack from './MainPageStack';
@@ -10,30 +11,71 @@ import ProfileStack from './ProfileStack';
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
-const DiaryIcon = (props) => (
-  <Icon {...props} name='book-outline'/>
-);
 
-const ActivityIcon = (props) => (
-  <Icon {...props} name='activity-outline'/>
-);
-
-const ChallengeIcon = (props) => (
-  <Icon {...props} name='award-outline'/>
-);
-
-const ProfileIcon = (props) => (
-  <Icon {...props} name='person-outline'/>
-);
+  const DiaryIcon = (props) => {
+    const focused = props.focused;
+    
+    return (
+      <Animatable.View 
+        animation={focused ? "flipInY" : ""} 
+        duration={500} 
+        useNativeDriver
+      >
+        <Icon {...props} name={focused ? 'book-open-outline' : 'book-outline'} />
+      </Animatable.View>
+    );
+  };
+  const ActivityIcon = (props) => {
+    const focused = props.focused;
+    
+    return (
+      <Animatable.View 
+        animation={focused ? "jello" : ""} 
+        iterationCount={focused ? "3" : "1"}
+        duration={500} 
+        useNativeDriver
+      >
+        <Icon {...props} name={focused ? 'activity' : 'activity-outline'} />
+      </Animatable.View>
+    );
+  };
+  
+  const ChallengeIcon = (props) => {
+    const focused = props.focused;
+    
+    return (
+      <Animatable.View 
+        animation={focused ? "tada" : ""} 
+        duration={500} 
+        useNativeDriver
+      >
+        <Icon {...props} name={focused ? 'award' : 'award-outline'} />
+      </Animatable.View>
+    );
+  };
+  
+  const ProfileIcon = (props) => {
+    const focused = props.focused;
+    
+    return (
+      <Animatable.View 
+        animation={focused ? "rotate" : ""} 
+        duration={500} 
+        useNativeDriver
+      >
+        <Icon {...props} name={focused ? 'person' : 'person-outline'} />
+      </Animatable.View>
+    );
+  };
 
 const BottomTabBar = ({ navigation, state }) => (
   <BottomNavigation
     selectedIndex={state.index}
-    onSelect={index => navigation.navigate(state.routeNames[index])}>
-    <BottomNavigationTab title='Diary' icon={DiaryIcon}/>
-    <BottomNavigationTab title='Activities' icon={ActivityIcon}/>
-    <BottomNavigationTab title='Challenges' icon={ChallengeIcon}/>
-    <BottomNavigationTab title='Profile' icon={ProfileIcon}/>
+    onSelect={index => navigation.navigate(state.routeNames[index])}> 
+    <BottomNavigationTab title='Diary' icon={(props) => <DiaryIcon {...props} focused={state.index === 0} />} />    
+    <BottomNavigationTab title='Activity' icon={(props) => <ActivityIcon {...props} focused={state.index === 1} />} />
+    <BottomNavigationTab title='Challenge' icon={(props) => <ChallengeIcon {...props} focused={state.index === 2} />} />
+    <BottomNavigationTab title='Profile' icon={(props) => <ProfileIcon {...props} focused={state.index === 3} />} />
   </BottomNavigation>
 );
 
