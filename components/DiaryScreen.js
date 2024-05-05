@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { Button, Input, Layout, Icon, Text } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
+import SpeechComponent from './SpeechComponent';
 
 
 
 const SendIcon = (props) => (
-	<Icon {...props} name='paper-plane-outline'/>
+	<Icon {...props} name='paper-plane-outline' />
 );
 
 const DiaryScreen = () => {
@@ -23,7 +24,13 @@ const DiaryScreen = () => {
 		navigation.navigate('Wizard', { text: textCopy });
 	};
 
-	return (
+	const speech = (
+		<>
+			<SpeechComponent />
+		</>
+	);
+
+	const diary = (
 		<Layout style={styles.container}>
 			<Layout style={styles.messageContainer}>
 				<Text style={styles.message}>Please explain your day</Text>
@@ -31,27 +38,29 @@ const DiaryScreen = () => {
 				<Text style={styles.message}>eco-friendly...</Text>
 			</Layout>
 			{data && <Text>{data.message}</Text>}
-        	<Layout style={styles.inputContainer}>
-			<Input
-				value={text}
-				onChangeText={setText}
-				placeholder="Enter text"
-				multiline
-				style={styles.input}
-				accessoryRight={() => 
-					<Button
-					  appearance='filled'
-					  accessoryRight={SendIcon}
-					  onPress={generateContent}
-					  disabled={loading}
-					  style={styles.sendButton}
-					/>
-				  }
-			/>
+			<Layout style={styles.inputContainer}>
+				<Input
+					value={text}
+					onChangeText={setText}
+					placeholder="Enter text"
+					multiline
+					style={styles.input}
+					accessoryRight={() =>
+						<Button
+							appearance='filled'
+							accessoryRight={SendIcon}
+							onPress={generateContent}
+							disabled={loading}
+							style={styles.sendButton}
+						/>
+					}
+				/>
 
 			</Layout>
 		</Layout>
 	);
+
+	return diary;
 }
 
 const styles = StyleSheet.create({
@@ -60,20 +69,20 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-    message: {
-        fontSize: 30,
-        fontWeight: 'bold',
-        textAlign: 'left',
+	message: {
+		fontSize: 30,
+		fontWeight: 'bold',
+		textAlign: 'left',
 		color: '#9BBD8E',
-    },
+	},
 	sendButton: {
 		marginRight: 10,
 		borderRadius: 50,
 	},
-    inputContainer: {
-        marginBottom: 30,
+	inputContainer: {
+		marginBottom: 30,
 		width: '100%',
-    },
+	},
 	input: {
 		flexGrow: 1,
 		margin: 20,
