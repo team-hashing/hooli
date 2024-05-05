@@ -20,8 +20,6 @@ const WizardScreen = ({ route, navigation }) => {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState(null);
 
-    const { width } = Dimensions.get('window');
-
     useEffect(() => {
         navigation.setOptions({
           headerRight: () => (
@@ -59,14 +57,6 @@ const WizardScreen = ({ route, navigation }) => {
         fetchData();
     }, []);
 
-
-    const handleScroll = (event) => {
-        const { contentOffset } = event.nativeEvent;
-        const viewSize = event.nativeEvent.layoutMeasurement;
-      
-        // Divide the horizontal offset by the width of the view to see which page is visible
-        const pageNum = Math.floor(contentOffset.x / viewSize.width);
-      };
     
 
 
@@ -75,7 +65,6 @@ const WizardScreen = ({ route, navigation }) => {
         horizontal={true}
         pagingEnabled={true}
         showsHorizontalScrollIndicator={true}
-        onScroll={handleScroll}
         scrollEventThrottle={16}
         >
         {loading ? (
