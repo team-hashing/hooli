@@ -1,7 +1,9 @@
 // components/SpeechScreen.js
 
 import React, { useState } from 'react';
-import { View, Text, TextInput } from 'react-native';
+import { View, TextInput } from 'react-native';
+import { Button, Input, Layout, Icon, Text } from '@ui-kitten/components';
+
 import Record 					from './Record';
 
 const SpeechComponent = () => {
@@ -62,4 +64,4 @@ const SpeechComponent = () => {
 	);
 };
 
-export default SpeechScreen;
+export default SpeechComponent;

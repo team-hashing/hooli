@@ -31,7 +31,7 @@ const { Navigator, Screen } = createBottomTabNavigator();
     
     return (
       <Animatable.View 
-        animation={focused ? "jello" : ""} 
+        animation={focused ? "tada" : ""} 
         iterationCount={focused ? 3 : 1}
         duration={500} 
         useNativeDriver

@@ -13,13 +13,7 @@ app.get('/', (req, res) => {
 app.listen(port, '0.0.0.0', () => {
     console.log(`Server listening at http://localhost:${port}`);
 });
-/*
-app.get('/generate', async (req, res) => {
-    const text = req.query.text;
-    const response = await generateContent(text);
-    res.send(response);
-});
-*/
+
 var admin = require("firebase-admin");
 
 var serviceAccount = require("../firebase_admin.json");
@@ -140,6 +134,12 @@ const _addStreak = async (userRef) => {
 app.post('/generate', async (req, res) => {
     const text = req.body.text;
     const userId = req.body.userId;
+
+    if (typeof text !== 'string' || text === '') {
+        res.status(400).send('Invalid text');
+        return;
+    }
+
     const response = await generateContent(text);
 
     // Add unique IDs to activities and future challenges

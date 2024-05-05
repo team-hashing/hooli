@@ -1,22 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { Button, Input, Layout, Icon, Text } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
 import ButtonToSpeak from './ButtonToSpeak';
-
+import SpeechComponent from './SpeechComponent';
+import Toast from 'react-native-toast-message';
 
 
 const SendIcon = (props) => (
-	<Icon {...props} name='paper-plane-outline'/>
+	<Icon {...props} name='paper-plane-outline' />
 );
 
-const DiaryScreen = () => {
+const DiaryScreen = (props) => {
 	const [text, setText] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [data, setData] = useState(null);
+	const [error, setError] = useState(false);
 
 	const navigation = useNavigation();
-
+	useEffect(() => {
+		const params = props.route.params; 
+		if (params && params.error) {
+			Toast.show({
+				type: 'error',
+				position: 'top',
+				text1: 'Error',
+				text2: 'There was an error generating the content.',
+			});
+		}
+	}, [props]);
 
 	const generateContent = async () => {
 		textCopy = text;
@@ -24,7 +36,13 @@ const DiaryScreen = () => {
 		navigation.navigate('Wizard', { text: textCopy });
 	};
 
-	return (
+	const speech = (
+		<>
+			<SpeechComponent />
+		</>
+	);
+
+	const diary = (
 		<Layout style={styles.container}>
 			<Layout style={styles.messageContainer}>
 				<Text style={styles.message}>Please explain your day</Text>
@@ -33,27 +51,30 @@ const DiaryScreen = () => {
 			</Layout>
 			<ButtonToSpeak/>
 			{data && <Text>{data.message}</Text>}
-        	<Layout style={styles.inputContainer}>
-			<Input
-				value={text}
-				onChangeText={setText}
-				placeholder="Enter text"
-				multiline
-				style={styles.input}
-				accessoryRight={() => 
-					<Button
-					  appearance='filled'
-					  accessoryRight={SendIcon}
-					  onPress={generateContent}
-					  disabled={loading}
-					  style={styles.sendButton}
-					/>
-				  }
-			/>
+			<Layout style={styles.inputContainer}>
+				<Input
+					value={text}
+					onChangeText={setText}
+					placeholder="Enter text"
+					multiline
+					style={styles.input}
+					accessoryRight={() =>
+						<Button
+							appearance='filled'
+							accessoryRight={SendIcon}
+							onPress={generateContent}
+							disabled={loading}
+							style={styles.sendButton}
+						/>
+					}
+				/>
 
 			</Layout>
+			<Toast ref={(ref) => Toast.setRef(ref)}/>
 		</Layout>
 	);
+
+	return diary;
 }
 
 const styles = StyleSheet.create({
@@ -62,20 +83,20 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
-    message: {
-        fontSize: 30,
-        fontWeight: 'bold',
-        textAlign: 'left',
+	message: {
+		fontSize: 30,
+		fontWeight: 'bold',
+		textAlign: 'left',
 		color: '#9BBD8E',
-    },
+	},
 	sendButton: {
 		marginRight: 10,
 		borderRadius: 50,
 	},
-    inputContainer: {
-        marginBottom: 30,
+	inputContainer: {
+		marginBottom: 30,
 		width: '100%',
-    },
+	},
 	input: {
 		flexGrow: 1,
 		margin: 20,
