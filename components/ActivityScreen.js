@@ -13,7 +13,6 @@ const ActivityScreen = () => {
         getExperiencesByDate(auth.currentUser.uid, date)
             .then(response => setExperiences(response))
             .catch(error => console.error(error));
-            setExperiences(experiences);
     };
 
     const callback = React.useCallback(() => {
