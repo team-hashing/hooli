@@ -50,6 +50,8 @@ const generateContent = async (text) => {
                     "activity_description": "activity description",
                     "feedback_message": "feedback message",
                     "eco_friendly": true/false,
+					"category": "transport"/"food"/"energy"/"waste"/"water"/"health",
+					"eco_score": -10/-5/0/5/10,
                   }
                 ],
                 "future_challenges": [
