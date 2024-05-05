@@ -1,4 +1,7 @@
 import { HOST } from '@env';
+import { usersDB } from "../../firebaseConfig";
+import { collection, doc, updateDoc, increment } from "firebase/firestore";
+import { auth } from "../../firebaseConfig";
 
 const incompleteChallenge = async (userId, experienceId, challengeId) => {
     try {
@@ -19,6 +22,14 @@ const incompleteChallenge = async (userId, experienceId, challengeId) => {
         }
 
         const result = await response.json();
+
+        // Update completedChallenges in Firestore
+        const usersCollection = collection(usersDB, 'users');
+        const userDoc = doc(usersCollection, auth.currentUser.uid);
+        await updateDoc(userDoc, {
+            completedChallenges: increment(0)
+        });
+
         return result;
     } catch (error) {
         console.error('Error:', error);
