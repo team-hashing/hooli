@@ -3,27 +3,35 @@ import { StyleSheet } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { HOST } from '@env'
-import { Layout, Text, Card, List, CheckBox } from '@ui-kitten/components';
+import { Layout, Text, Card, List, CheckBox, Popover, Icon, Button } from '@ui-kitten/components';
 import { auth } from '../firebaseConfig';
-import getExperiencesByDate from '../businessLogic/experiences/getExperiencesByDate';
+import getExperiences from '../businessLogic/experiences/getExperiences';
 import { useFocusEffect } from '@react-navigation/native';
 import completeChallenge from '../businessLogic/experiences/completeChallenge';
 import incompleteChallenge from '../businessLogic/experiences/incompleteChallenge';
 import deleteChallenge from '../businessLogic/experiences/deleteChallenge';
-import { set } from '@gluestack-style/react';
+import { useNavigation } from '@react-navigation/native';
 
-const ChallengeScreen = () => {
+
+const ChallengeScreen = () => {  
+    const navigation = useNavigation();
     const [experiences, setExperiences] = useState([]);
+    const [filter, setFilter] = useState('all');
+    const [visible, setVisible] = useState(false);
+  
 
+    const FilterMenu = () => (
+        <Layout>
+            <Button appearance={filter === 'all' ? 'primary': 'ghost'} status='basic' style={styles.filterButton} title="All" onPress={() => { setFilter('all'); setVisible(false); }}> All </Button>
+            <Button appearance={filter === 'completed' ? 'primary': 'ghost'} status='basic' style={styles.filterButton} title="Completed" onPress={() => { setFilter('completed'); setVisible(false); }}> Completed </Button>
+            <Button appearance={filter === 'notCompleted' ? 'primary': 'ghost'} status='basic' style={styles.filterButton} title="Pending" onPress={() => { setFilter('notCompleted'); setVisible(false); }}> Pending </Button>
+        </Layout>
+    );
 
-
-
-    const handleDateChange = (date) => {
-        getExperiencesByDate(auth.currentUser.uid, date)
+    const handleChallengeChange = () => {
+        getExperiences(auth.currentUser.uid)
             .then(response => setExperiences(response))
             .catch(error => console.error(error));
-        setExperiences(experiences);
 
     };
 
@@ -35,13 +43,23 @@ const ChallengeScreen = () => {
 
 
     const callback = React.useCallback(() => {
-        const userId = auth.currentUser.uid;
-        const date = new Date().toISOString().split('T')[0];
-        handleDateChange(date);
+        handleChallengeChange();
     }, []);
 
     useFocusEffect(callback);
 
+    useEffect(() => {
+        navigation.setOptions({
+          headerRight: () => (
+            <Popover
+              visible={visible}
+              anchor={() => <Icon style={styles.filterIcon} name='options-outline' onPress={() => setVisible(true)} />}
+              onBackdropPress={() => setVisible(false)}>
+              <FilterMenu />
+            </Popover>
+          ),
+        });
+      }, [navigation, visible]);
 
     const handleDelete = (experienceId, challengeId) => {
         const userId = auth.currentUser.uid;
@@ -56,8 +74,6 @@ const ChallengeScreen = () => {
             }
             return experience;
         }));
-
-        console.log("Challenge not deleted");
     };
 
 
@@ -69,6 +85,15 @@ const ChallengeScreen = () => {
         );
     };
 
+    const filteredChallenges = challenges.filter(challenge => {
+        if (filter === 'completed') {
+        return challenge.isCompleted;
+        } else if (filter === 'notCompleted') {
+        return !challenge.isCompleted;
+        } else {
+        return true;
+        }
+    });
 
     const renderItem = ({ item: challenge }) => {
         const handleCheckboxChange = async (challenge) => {
@@ -79,7 +104,7 @@ const ChallengeScreen = () => {
                 await completeChallenge(userId, challenge.experienceId, challenge.id);
             }
 
-            handleDateChange(new Date().toISOString().split('T')[0]);
+            handleChallengeChange();
 
         };
 
@@ -104,13 +129,13 @@ const ChallengeScreen = () => {
     return (
         <GestureHandlerRootView style={styles.container}>
             <Layout style={styles.layoutContainer}>
-                {challenges.length === 0 && (
+                {filteredChallenges.length === 0 && (
                     <>
                         <Text style={styles.ChallengesNotFoundText}>No challenges found</Text>
                     </>)}
                 <List
                     style={styles.list}
-                    data={challenges}
+                    data={filteredChallenges}
                     renderItem={renderItem}
                 />
             </Layout>
@@ -171,6 +196,16 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    filterIcon: {
+        width: 25,
+        height: 25,
+        marginHorizontal: 40,
+        marginVertical: 10,
+    },
+    filterButton: {
+        padding: 10,
+        color: 'black',
     },
 });
 

@@ -1,4 +1,3 @@
-import { FIREBASE_API_KEY } from '@env'
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { initializeAuth } from "firebase/auth";
@@ -13,7 +12,7 @@ import { getStorage } from "firebase/storage"; // Import this
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 export const firebaseConfig = {
-  apiKey: FIREBASE_API_KEY,
+  apiKey: "AIzaSyA7VOndmQUDqIEgdrWNHTlOcwKIYZabNt8",
   authDomain: "hooli-8a670.firebaseapp.com",
   projectId: "hooli-8a670",
   storageBucket: "hooli-8a670.appspot.com",

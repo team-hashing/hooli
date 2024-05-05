@@ -1,67 +1,68 @@
 {
-	"expo": {
-		"name": "Hooli",
-		"slug": "Hooli",
-		"version": "1.0.0",
-		"orientation": "portrait",
-		"icon": "./assets/icon.png",
-		"userInterfaceStyle": "light",
-		"splash": {
-			"image": "./assets/splash.png",
-			"resizeMode": "contain",
-			"backgroundColor": "#ffffff"
-		},
-		"assetBundlePatterns": [
-			"**/*"
-		],
-		"ios": {
-			"supportsTablet": true,
-			"bundleIdentifier": "com.anonymous.SpeectToTextApp"
-		},
-		"android": {
-			"adaptiveIcon": {
-				"foregroundImage": "./assets/adaptive-icon.png",
-				"backgroundColor": "#ffffff"
-			},
-			"permissions": [
-				"android.permission.RECORD_AUDIO"
-			],
-			"package": "com.anonymous.SpeectToTextApp"
-		},
-		"web": {
-			"favicon": "./assets/favicon.png"
-		},
-		"plugins": [
-			[
-				"@react-native-voice/voice",
-				{
-					"microphonePermission": "CUSTOM: Allow $(PRODUCT_NAME) to access the microphone",
-					"speechRecognitionPermission": "CUSTOM: Allow $(PRODUCT_NAME) to securely recognize user speech"
-				}
-			]
-		],
-		"extra": {
-			"eas": {
-				"projectId": "3c26ce12-d4eb-4d48-8d31-b917489393f3"
-			}
-		}
-	},
-	"ios": {
-		"supportsTablet": true,
-		"bundleIdentifier": "com.anonymous.SpeectToTextApp",
-		"infoPlist": {
-			"NSSpeechRecognitionUsageDescription": "This app uses speech recognition to convert your speech to text.",
-			"NSCameraUsageDescription": "This app uses the camera to let user put a photo in his profile page."
-		}
-	},
-	"android": {
-		"adaptiveIcon": {
-			"foregroundImage": "./assets/adaptive-icon.png",
-			"backgroundColor": "#FFFFFF"
-		},
-		"permissions": [
-			"android.permission.RECORD_AUDIO"
-		],
-		"package": "com.anonymous.SpeectToTextApp"
-	}
+  "expo": {
+    "name": "Hooli",
+    "slug": "hooli",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.SpeectToTextApp"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.anonymous.SpeectToTextApp"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "@react-native-voice/voice",
+        {
+          "microphonePermission": "Allow Voice to Text Tutorial to access the microphone",
+          "speechRecognitionPermission": "Allow Voice to Text Tutorial to securely recognize user speech"
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "01cfb5fc-59f4-4450-bac6-1da4fe138e58"
+      }
+    },
+    "owner": "danivs10"
+  },
+  "ios": {
+    "supportsTablet": true,
+    "bundleIdentifier": "com.anonymous.SpeectToTextApp",
+    "infoPlist": {
+      "NSSpeechRecognitionUsageDescription": "This app uses speech recognition to convert your speech to text.",
+      "NSCameraUsageDescription": "This app uses the camera to let user put a photo in his profile page."
+    }
+  },
+  "android": {
+    "adaptiveIcon": {
+      "foregroundImage": "./assets/adaptive-icon.png",
+      "backgroundColor": "#FFFFFF"
+    },
+    "permissions": [
+      "android.permission.RECORD_AUDIO"
+    ],
+    "package": "com.anonymous.SpeectToTextApp"
+  }
 }

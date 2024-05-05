@@ -9,8 +9,10 @@ import getUserInfo from '../businessLogic/user/getUserInfo';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import Toast from 'react-native-toast-message';
 import { allMedals, medalDescriptions, medalNames, medalImages } from '../businessLogic/medalData';
-import { Dimensions } from 'react-native';
 import { useTheme } from '@ui-kitten/components';
+import { Dimensions } from 'react-native';
+import { BarChart, ProgressChart } from 'react-native-chart-kit';
+
 
 const { width } = Dimensions.get('window');
 
@@ -59,6 +61,28 @@ const ProfileScreen = () => {
 			fetchUser();
 		}, [])
 	);
+	
+	const data = {
+		labels: ['🚲', '🥗', '⚡️', '🗑️', '💧', '🏥'],
+		datasets: [
+		  {
+			data: [
+			  scores.transport,
+			  scores.food,
+			  scores.energy,
+			  scores.waste,
+			  scores.water,
+			  scores.health,
+			],
+		  },
+		],
+	  };
+
+	  const dataPercentage = {
+		labels: ["Transport", "Food", "Energy", "Waste", "Water", "Health"], // Optional
+		data: [scores.transport/totalScore, scores.food/totalScore, scores.energy/totalScore, scores.waste/totalScore, scores.water/totalScore, scores.health/totalScore]
+	  };
+	  
 
 	useEffect(() => {
 		navigation.setOptions({
@@ -99,9 +123,8 @@ const ProfileScreen = () => {
 					pagingEnabled={true}
 					onScroll={handleScroll}
 					scrollEventThrottle={16}>
-					<View style={styles.view} >
+					<ScrollView style={styles.view} >
 						<View style={styles.rowView}>
-							{/* Medals section */}
 							<Card style={styles.card}>
 								<TouchableOpacity onPress={() => Toast.show({ type: 'success', position: 'bottom', bottomOffset: 20, text1: 'Challenges Completed', visibilityTime: 2000 })}>
 									<View style={styles.cardView}>
@@ -110,7 +133,6 @@ const ProfileScreen = () => {
 									</View>
 								</TouchableOpacity>
 							</Card>
-							{/* Streak section */}
 							<Card style={styles.card}>
 								<TouchableOpacity onPress={() => Toast.show({ type: 'success', position: 'bottom', bottomOffset: 20, text1: 'Daily Streak', visibilityTime: 2000 })}>
 									<View style={styles.cardView}>
@@ -130,8 +152,8 @@ const ProfileScreen = () => {
 									</View>
 								</TouchableOpacity>
 							</Card>
+							{/* 
 							<View style={{width: '50%', flexDirection: 'row'}}>
-							{/* Transport section */}
 							<Card style={styles.card}>
 								<TouchableOpacity onPress={() => Toast.show({ type: 'success', position: 'bottom', bottomOffset: 20, text1: 'ECO-Transport Score', visibilityTime: 2000 })}>
 									<View style={styles.cardView}>
@@ -140,9 +162,6 @@ const ProfileScreen = () => {
 									</View>
 								</TouchableOpacity>
 							</Card>
-
-
-							{/* Food section */}
 							<Card style={styles.card}>
 								<TouchableOpacity onPress={() => Toast.show({ type: 'success', position: 'bottom', bottomOffset: 20, text1: 'Food Waste Avoided Score', visibilityTime: 2000 })}>
 									<View style={styles.cardView}>
@@ -151,10 +170,32 @@ const ProfileScreen = () => {
 									</View>
 								</TouchableOpacity>
 							</Card>
-							</View>
+						</View> */}
 						</View>
-						<View style={styles.rowView}>
-							{/* Energy section */}
+						<BarChart
+						data={data}
+						width={Dimensions.get('window').width - 20}
+						height={220}
+						yAxisLabel=""
+						fromZero={true}
+						withInnerLines={false}
+						flatColor={true}
+						chartConfig={{
+							backgroundColor: theme['color-primary-900'],
+							backgroundGradientFrom: '#33402f',
+							backgroundGradientTo: '#33402f',
+							decimalPlaces: 0,
+							backgroundGradientToOpacity: 0.05,
+							backgroundGradientFromOpacity: 0.05,
+							color: (opacity = 1) => theme['color-primary-500'],
+							barPercentage: 0.5,
+						}}
+						style={{
+							marginVertical: 8,
+							borderRadius: 16,
+						}}
+						/>
+						{/* <View style={styles.rowView}>
 							<Card style={styles.card}>
 								<TouchableOpacity onPress={() => Toast.show({ type: 'success', position: 'bottom', bottomOffset: 20, text1: 'Energy Saving Score', visibilityTime: 2000 })}>
 									<View style={styles.cardView}>
@@ -163,7 +204,6 @@ const ProfileScreen = () => {
 									</View>
 								</TouchableOpacity>
 							</Card>
-							{/* Waste section */}
 							<Card style={styles.card}>
 								<TouchableOpacity onPress={() => Toast.show({ type: 'success', position: 'bottom', bottomOffset: 20, text1: 'Waste Reduced Score', visibilityTime: 2000 })}>
 									<View style={styles.cardView}>
@@ -172,7 +212,6 @@ const ProfileScreen = () => {
 									</View>
 								</TouchableOpacity>
 							</Card>
-							{/* Water section */}
 							<Card style={styles.card}>
 								<TouchableOpacity onPress={() => Toast.show({ type: 'success', position: 'bottom', bottomOffset: 20, text1: 'Water Saving Score', visibilityTime: 2000 })}>
 									<View style={styles.cardView}>
@@ -181,7 +220,6 @@ const ProfileScreen = () => {
 									</View>
 								</TouchableOpacity>
 							</Card>
-							{/* Health section */}
 							<Card style={styles.card}>
 								<TouchableOpacity onPress={() => Toast.show({ type: 'success', position: 'bottom', bottomOffset: 20, text1: 'Healthy Lifestyle Score', visibilityTime: 2000 })}>
 									<View style={styles.cardView}>
@@ -190,8 +228,8 @@ const ProfileScreen = () => {
 									</View>
 								</TouchableOpacity>
 							</Card>
-						</View>
-					</View>
+						</View>*/}
+					</ScrollView>
 					<View style={styles.view} >
 						<Text category='h4' style={{ textAlign: 'center', marginBottom: 10 }}>Medals</Text>
 						<FlatList
