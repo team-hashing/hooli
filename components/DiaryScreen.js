@@ -1,22 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { Button, Input, Layout, Icon, Text } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
 import SpeechComponent from './SpeechComponent';
-
+import Toast from 'react-native-toast-message';
 
 
 const SendIcon = (props) => (
 	<Icon {...props} name='paper-plane-outline' />
 );
 
-const DiaryScreen = () => {
+const DiaryScreen = (props) => {
 	const [text, setText] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [data, setData] = useState(null);
+	const [error, setError] = useState(false);
 
 	const navigation = useNavigation();
-
+	useEffect(() => {
+		const params = props.route.params; 
+		if (params && params.error) {
+			Toast.show({
+				type: 'error',
+				position: 'top',
+				text1: 'Error',
+				text2: 'There was an error generating the content.',
+			});
+		}
+	}, [props]);
 
 	const generateContent = async () => {
 		textCopy = text;
@@ -57,6 +68,7 @@ const DiaryScreen = () => {
 				/>
 
 			</Layout>
+			<Toast ref={(ref) => Toast.setRef(ref)}/>
 		</Layout>
 	);
 
