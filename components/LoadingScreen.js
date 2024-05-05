@@ -43,8 +43,7 @@ const LoadingScreen = () => {
       <Animatable.Image 
         source={require('../assets/splash.png')} 
         style={styles.image} 
-        animation="swing" 
-        iterationCount="infinite" 
+        animation="bounceIn" 
         duration={2000} 
       />
     </View>

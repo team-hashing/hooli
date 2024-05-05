@@ -1,9 +1,11 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import { Layout, Text } from '@ui-kitten/components';
 import { useTheme } from '@ui-kitten/components';
 import { StyleSheet } from 'react-native';
 import { Card } from '@gluestack-ui/themed';
 import { ScrollView } from 'react-native-gesture-handler';
+import * as Animatable from 'react-native-animatable';
 
 
 const ActivitiesWizardPage = ({ data }) => {
@@ -66,16 +68,15 @@ const ActivitiesWizardPage = ({ data }) => {
   return (
     <Layout style={styles.container}>
         <Text style={styles.ActivitiesHeader}>YOUR DAILY ACTIVITIES</Text>
-
-            <ScrollView style={styles.ActivityView}>
-                    {data && data.activities.map((activity, index) => (
-                        <Card key={index} style={styles.activityContainer}>
-                            <Text style={styles.ActivityMessage}>
-                            {activity.activity}
-                            </Text>
-                        </Card>
-                    ))}
-            </ScrollView>
+        <ScrollView style={styles.ActivityView}>
+                {data && data.activities.map((activity, index) => (
+                    <Card key={index} style={styles.activityContainer}>
+                        <Text style={styles.ActivityMessage}>
+                        {activity.activity}
+                        </Text>
+                    </Card>
+                ))}
+        </ScrollView>
     </Layout>
   );
 };
