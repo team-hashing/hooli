@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { Button, Input, Layout, Icon, Text } from '@ui-kitten/components';
 import { useNavigation } from '@react-navigation/native';
+import ButtonToSpeak from './ButtonToSpeak';
 
 
 
@@ -30,6 +31,7 @@ const DiaryScreen = () => {
 				<Text style={styles.message}>to become more</Text>
 				<Text style={styles.message}>eco-friendly...</Text>
 			</Layout>
+			<ButtonToSpeak/>
 			{data && <Text>{data.message}</Text>}
         	<Layout style={styles.inputContainer}>
 			<Input
