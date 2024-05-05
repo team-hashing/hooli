@@ -68,7 +68,7 @@ const ActivitiesWizardPage = ({ data }) => {
         <Text style={styles.ActivitiesHeader}>YOUR DAILY ACTIVITIES</Text>
 
             <ScrollView style={styles.ActivityView}>
-                    {data.activities.map((activity, index) => (
+                    {data && data.activities.map((activity, index) => (
                         <Card key={index} style={styles.activityContainer}>
                             <Text style={styles.ActivityMessage}>
                             {activity.activity}
