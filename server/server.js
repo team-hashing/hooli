@@ -177,7 +177,11 @@ app.post('/generate', async (req, res) => {
 
     // Update user's scores
     for (const category in scores) {
-        await userRef.update({ [`scores.${category}`]: admin.firestore.FieldValue.increment(scores[category]) });
+        try{
+            await userRef.update({ [`scores.${category}`]: admin.firestore.FieldValue.increment(scores[category]) });
+        } catch (error) {
+            console.error('Error updating user scores:', error);
+        }
     }
 
     try {

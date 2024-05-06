@@ -70,7 +70,7 @@ const DiaryScreen = (props) => {
 				/>
 
 			</Layout>
-			<Toast ref={(ref) => Toast.setRef(ref)}/>
+			<Toast/>
 		</Layout>
 	);
 

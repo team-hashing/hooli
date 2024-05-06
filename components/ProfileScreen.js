@@ -77,11 +77,6 @@ const ProfileScreen = () => {
 		  },
 		],
 	  };
-
-	  const dataPercentage = {
-		labels: ["Transport", "Food", "Energy", "Waste", "Water", "Health"], // Optional
-		data: [scores.transport/totalScore, scores.food/totalScore, scores.energy/totalScore, scores.waste/totalScore, scores.water/totalScore, scores.health/totalScore]
-	  };
 	  
 
 	useEffect(() => {
@@ -128,7 +123,7 @@ const ProfileScreen = () => {
 							<Card style={styles.card}>
 								<TouchableOpacity onPress={() => Toast.show({ type: 'success', position: 'bottom', bottomOffset: 20, text1: 'Challenges Completed', visibilityTime: 2000 })}>
 									<View style={styles.cardView}>
-										<Icon name='checkmark-circle-outline' fill='#5EB904' style={{ width: 25, height: 25 }} />
+										<Icon name='star-outline' fill='#FFD700' style={{ width: 25, height: 25 }} />
 										<Text category='h6'>{completedChallenges}</Text>
 									</View>
 								</TouchableOpacity>
@@ -136,7 +131,7 @@ const ProfileScreen = () => {
 							<Card style={styles.card}>
 								<TouchableOpacity onPress={() => Toast.show({ type: 'success', position: 'bottom', bottomOffset: 20, text1: 'Daily Streak', visibilityTime: 2000 })}>
 									<View style={styles.cardView}>
-										<Icon name='shield-outline' fill='#EAA24C' style={{ width: 25, height: 25 }} />
+										<Icon name='shield-outline' fill='#2eb2f0' style={{ width: 25, height: 25 }} />
 										<Text category='h6'>{streak}</Text>
 									</View>
 								</TouchableOpacity>

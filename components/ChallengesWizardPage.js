@@ -20,7 +20,6 @@ const ChallengesWizardPage = ({ data, isActive }) => {
             justifyContent: 'center',
             alignItems: 'center',
             backgroundColor: '#637C5A',
-            padding: 20,
             paddingTop: 40,
             width: '100%',
         },
@@ -88,6 +87,10 @@ const ChallengesWizardPage = ({ data, isActive }) => {
             flexWrap: 'wrap',
             marginTop: 50,
         },
+        ChallengeAnimation: {
+            padding: 10,
+            opacity: 0,
+        },
     });
 
 
@@ -96,11 +99,17 @@ const ChallengesWizardPage = ({ data, isActive }) => {
 
     useEffect(() => {
         if (isActive) {
-            titleRef.current.jello(2000);
+            titleRef.current.fadeIn(1500);
             viewRefs.current.forEach((ref, index) => {
                 setTimeout(() => {
-                    ref.jello(1500);
-                }, 300 * index);
+                    ref.bounceIn(2000);
+                }, 1000*(index+1));
+            });
+        }
+        else {
+            titleRef.current.fadeOutUp(300);
+            viewRefs.current.forEach((ref, index) => {
+                ref.bounceOut(200);
             });
         }
     }, [isActive]);
@@ -120,6 +129,7 @@ const ChallengesWizardPage = ({ data, isActive }) => {
                             ref={(ref) => (viewRefs.current[index] = ref)}
                             delay={200}
                             key={index}
+                            style={styles.ChallengeAnimation}
                         >
                             <View style={styles.outerContainer}>
                                 <Card style={styles.activityContainer}>

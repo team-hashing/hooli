@@ -11,6 +11,7 @@ import completeChallenge from '../businessLogic/experiences/completeChallenge';
 import incompleteChallenge from '../businessLogic/experiences/incompleteChallenge';
 import deleteChallenge from '../businessLogic/experiences/deleteChallenge';
 import { useNavigation } from '@react-navigation/native';
+import { View } from 'react-native-animatable';
 
 
 const ChallengeScreen = () => {  
@@ -96,24 +97,45 @@ const ChallengeScreen = () => {
     });
 
     const renderItem = ({ item: challenge }) => {
-        const handleCheckboxChange = async (challenge) => {
+        const handleCheckboxChange = (challenge) => {
             const userId = auth.currentUser.uid;
-            if (challenge.isCompleted) {
-                await incompleteChallenge(userId, challenge.experienceId, challenge.id);
+        
+            // Update the state immediately
+            setExperiences(experiences.map(experience => {
+                if (experience.id === challenge.experienceId) {
+                    return {
+                        ...experience,
+                        future_challenges: experience.future_challenges.map(ch => {
+                            if (ch.id === challenge.id) {
+                                return { ...ch, isCompleted: !ch.isCompleted };
+                            }
+                            return ch;
+                        }),
+                    };
+                }
+                return experience;
+            }));
+        
+            // Then perform the completeChallenge or incompleteChallenge function
+            if (!challenge.isCompleted) {
+                completeChallenge(userId, challenge.experienceId, challenge.id);
             } else {
-                await completeChallenge(userId, challenge.experienceId, challenge.id);
+                incompleteChallenge(userId, challenge.experienceId, challenge.id);
             }
-
-            handleChallengeChange();
-
         };
 
         return (
             <Swipeable renderRightActions={() => renderRightAction(challenge.experienceId, challenge.id)} >
                 <Card style={styles.challengeContainer}>
-                    <Text style={styles.challengeTitle}>{challenge.challenge}</Text>
+                    <View style={styles.challengeHeader}>
+                        <Text style={styles.challengeTitle}>{challenge.challenge}</Text>
+                        <View style={styles.starGroup}>
+                        {[...Array(challenge.challenge_difficulty+1)].map((_, i) => 
+                            <Icon name='star' style={styles.starsIcon} fill='#FFD700'/>
+                        )}
+                        </View>
+                    </View>
                     <Text style={styles.challengeDescription}>{challenge.challenge_description}</Text>
-                    <Text style={styles.challengeDifficulty}>Difficulty: {challenge.challenge_difficulty}</Text>
                     <CheckBox
                         style={styles.checkBox}
                         onChange={() => (handleCheckboxChange(challenge))}
@@ -156,15 +178,12 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 5,
+        width: '80%',
+
     },
     challengeDescription: {
         fontSize: 16,
         color: '#666',
-    },
-    challengeDifficulty: {
-        fontSize: 14,
-        color: '#999',
-        marginTop: 10,
     },
     deleteButton: {
         backgroundColor: 'red',
@@ -207,6 +226,24 @@ const styles = StyleSheet.create({
         padding: 10,
         color: 'black',
     },
+    starsIcon: {
+        color: 'gold',
+        width: 25,
+        height: 25,
+    },
+    challengeHeader: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    starGroup: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'right',
+        justifyContent: 'flex-end',
+        width: '20%',
+    }
 });
 
 export default ChallengeScreen;

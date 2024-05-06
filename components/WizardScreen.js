@@ -94,10 +94,10 @@ const WizardScreen = ({ route, navigation }) => {
                         <ResponseWizardPage data={data} isActive={currentPage === 0} />
                     </View>
                     <View style={styles.page}>
-                        <ActivitiesWizardPage data={data} isActive={currentPage === 1} />
+                        <ActivitiesWizardPage data={data} isActive={currentPage >= 1} />
                     </View>
                     <View style={styles.page}>
-                        <ChallengesWizardPage data={data} isActive={currentPage === 2} />
+                        <ChallengesWizardPage data={data} isActive={currentPage >= 2} />
                     </View>
 
                 </>

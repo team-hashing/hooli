@@ -51,7 +51,7 @@ const generateContent = async (text) => {
                     "feedback_message": "feedback message",
                     "eco_friendly": true/false,
 					"category": "transport"/"food"/"energy"/"waste"/"water"/"health",
-					"eco_score": -10/-5/0/5/10,
+					"eco_score": range(-10/10),
                   }
                 ],
                 "future_challenges": [
@@ -62,7 +62,7 @@ const generateContent = async (text) => {
                   }
                 ],
               }
-              REMEMBER TO ONLY ANSWER WITH A WELL STRUCTURED VALID JSON OBJECT, NO MARKDOWN AND NO OTHER TEXT SHOULD BE RETURNED. ANSWER VALUES BE IN SAME LANGUAGE AS REQUEST`
+              REMEMBER TO ONLY ANSWER WITH A WELL STRUCTURED VALID JSON OBJECT, NO MARKDOWN AND NO OTHER TEXT SHOULD BE RETURNED. ANSWER MESSAGES NEED TO BE IN SAME LANGUAGE AS REQUEST`
 					}
 				]
 			},

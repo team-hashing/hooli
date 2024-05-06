@@ -5,6 +5,7 @@ import {auth} from '../firebaseConfig';
 import DayPickerComponent from './dayPickerComponent';
 import getExperiencesByDate from '../businessLogic/experiences/getExperiencesByDate';
 import { useFocusEffect } from '@react-navigation/native';
+import { View } from 'react-native-animatable';
 
 const ActivityScreen = () => {
     const [experiences, setExperiences] = useState([]);
@@ -26,7 +27,10 @@ const ActivityScreen = () => {
 
     const renderItem = ({ item: activity }) => (
         <Card style={styles.activityContainer}>
-          <Text style={styles.activityTitle}>{activity.activity}</Text>
+          <View style={styles.activityHeader}>
+            <Text style={styles.activityTitle}>{activity.activity}</Text>
+            <Text style={styles.activityPoints} status={activity.eco_score > 0 ? 'primary':'danger'}>{activity.eco_score}</Text>
+          </View>
           <Text style={styles.activityDescription}>{activity.activity_description}</Text>
           <Text style={styles.feedbackMessage}>{activity.feedback_message}</Text>
           <Text style={styles.ecoFriendlyText}  status={activity.eco_friendly? 'primary':'danger'}>
@@ -70,6 +74,14 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 5,
+        width: '80%',
+    },
+    activityPoints: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 5,
+        width: '10%',
+        textAlign: 'right'
     },
     activityDescription: {
         fontSize: 16,
@@ -94,6 +106,11 @@ const styles = StyleSheet.create({
         marginTop: 20,
         color: '#999',
     },
+    activityHeader: {
+        flexDirection: 'row',
+        flex: 1,
+        justifyContent: 'space-between'
+    }
 });
 
 export default ActivityScreen;
