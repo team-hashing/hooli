@@ -43,20 +43,20 @@ const generateContent = async (text) => {
               the template below containing the activities with their caractheristics and a message either giving 
               kudos or encouraging improvement and future challenges the user can do to improve and be more eco-friendly:
               {
-                "message": "response message to the user",
+                "message": "feedback of the day message to the user in less than 200 characters",
                 "activities": [
                   {
-                    "activity": "activity name",
+                    "activity": "activity headline",
                     "activity_description": "activity description",
                     "feedback_message": "feedback message",
                     "eco_friendly": true/false,
 					"category": "transport"/"food"/"energy"/"waste"/"water"/"health",
-					"eco_score": range(-10/10),
+					"eco_score": range(-10/10) // -10 being very bad for the environment, 0 neutral and 10 being very good,
                   }
                 ],
                 "future_challenges": [
                   {
-                    "challenge": "challenge name",
+                    "challenge": "challenge headline",
                     "challenge_description": "challenge description",
                     "challenge_difficulty": 0/1/2,
                   }

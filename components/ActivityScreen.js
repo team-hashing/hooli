@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, ActivityIndicator } from 'react-native';
 import { Layout, Text, Card, List } from '@ui-kitten/components';
 import {auth} from '../firebaseConfig';
 import DayPickerComponent from './dayPickerComponent';
@@ -8,12 +8,18 @@ import { useFocusEffect } from '@react-navigation/native';
 import { View } from 'react-native-animatable';
 
 const ActivityScreen = () => {
+    const [isLoading, setIsLoading] = useState();
     const [experiences, setExperiences] = useState([]);
 
     const handleDateChange = (date) => {
+        setIsLoading(true);
         getExperiencesByDate(auth.currentUser.uid, date)
-            .then(response => setExperiences(response))
+            .then(response => {
+                setExperiences(response);
+                setIsLoading(false);
+            })
             .catch(error => console.error(error));
+        
     };
 
     const callback = React.useCallback(() => {
@@ -32,10 +38,10 @@ const ActivityScreen = () => {
             <Text style={styles.activityPoints} status={activity.eco_score > 0 ? 'primary':'danger'}>{activity.eco_score}</Text>
           </View>
           <Text style={styles.activityDescription}>{activity.activity_description}</Text>
-          <Text style={styles.feedbackMessage}>{activity.feedback_message}</Text>
           <Text style={styles.ecoFriendlyText}  status={activity.eco_friendly? 'primary':'danger'}>
             {activity.eco_friendly ? 'Eco-friendly' : 'Not eco-friendly'}
           </Text>
+          <Text style={styles.feedbackMessage}>{activity.feedback_message}</Text>
         </Card>
       );
 
@@ -45,16 +51,22 @@ const ActivityScreen = () => {
     return (
         <Layout style={styles.container}>
             <DayPickerComponent onDateChange={handleDateChange} />
-                {activities.length === 0 && (
+            {isLoading ?
+            (
+            <ActivityIndicator size="large" color="#00ff00" />
+            ) : (
+                activities.length === 0 ? (
                 <>
-                    <Text style={styles.ActivitiesNotFoundText}>No activities found</Text>
+                    <Text style={styles.ActivitiesNotFoundText}>No activities found for this day</Text>
                 </>
-                )}
-            <List
-                style={styles.list}
-                data={activities}
-                renderItem={renderItem}
-            />
+                ) : (
+                    <List
+                        style={styles.list}
+                        data={activities}
+                        renderItem={renderItem}
+                    />
+                )
+            )}
         </Layout>
       );
 

@@ -247,7 +247,7 @@ const ProfileScreen = () => {
 					</View>
 				</ScrollView>
 			</View>
-			<Toast ref={(ref) => Toast.setRef(ref)}/>
+			<Toast />
 		</Layout >
 	);
 };
@@ -302,7 +302,6 @@ const styles = StyleSheet.create({
 		width: 70,
 		height: 70,
 		margin: 5,
-		grayscale: 1,
 		tintColor: "gray",
 		opacity: 0.5,
 	},

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StyleSheet } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Layout, Text, Card, List, CheckBox, Popover, Icon, Button } from '@ui-kitten/components';
 import { auth } from '../firebaseConfig';
 import getExperiences from '../businessLogic/experiences/getExperiences';
@@ -125,13 +125,13 @@ const ChallengeScreen = () => {
         };
 
         return (
-            <Swipeable renderRightActions={() => renderRightAction(challenge.experienceId, challenge.id)} >
+            <Swipeable key={challenge.id} renderRightActions={() => renderRightAction(challenge.experienceId, challenge.id)} >
                 <Card style={styles.challengeContainer}>
                     <View style={styles.challengeHeader}>
                         <Text style={styles.challengeTitle}>{challenge.challenge}</Text>
                         <View style={styles.starGroup}>
                         {[...Array(challenge.challenge_difficulty+1)].map((_, i) => 
-                            <Icon name='star' style={styles.starsIcon} fill='#FFD700'/>
+                            <Icon key={i} name='star' style={styles.starsIcon} fill='#FFD700'/>
                         )}
                         </View>
                     </View>

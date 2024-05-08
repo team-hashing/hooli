@@ -49,7 +49,7 @@ const DiaryScreen = (props) => {
 				<Text style={styles.message}>to become more</Text>
 				<Text style={styles.message}>eco-friendly...</Text>
 			</Layout>
-			<ButtonToSpeak/>
+			{/*<ButtonToSpeak/>*/}
 			{data && <Text>{data.message}</Text>}
 			<Layout style={styles.inputContainer}>
 				<Input
