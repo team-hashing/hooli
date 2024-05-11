@@ -6,7 +6,7 @@ import { auth } from "../../firebaseConfig";
 
 const getUserInfo = async (userId) => {
     try {
-
+        console.log('userId', userId);
         const response = await fetch(`http://${HOST}:3000/getUserAttributes`, {
             method: 'POST',
             headers: {

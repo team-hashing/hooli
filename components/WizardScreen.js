@@ -10,7 +10,6 @@ import ResponseWizardPage from './ResponseWizardPage';
 import ActivitiesWizardPage from './ActivitiesWizardPage';
 import ChallengesWizardPage from './ChallengesWizardPage';
 import LoadingWizardPage from './LoadingWizardPage';
-import { set } from '@gluestack-style/react';
 
 
 
@@ -42,6 +41,9 @@ const WizardScreen = ({ route, navigation }) => {
             try {
                 setLoading(true);
                 const userId = auth.currentUser.uid;
+
+                console.log(`http://${HOST}:3000/generate`);
+                console.log(text);
 
                 const response = await fetch(`http://${HOST}:3000/generate`, {
                     method: 'POST',

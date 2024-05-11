@@ -1,9 +1,8 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Layout, Text } from '@ui-kitten/components';
-import { useTheme } from '@ui-kitten/components';
+import { useTheme, Card } from '@ui-kitten/components';
 import { StyleSheet } from 'react-native';
-import { Card } from '@gluestack-ui/themed';
 import { ScrollView } from 'react-native-gesture-handler';
 import * as Animatable from 'react-native-animatable';
 import { useRef } from 'react';

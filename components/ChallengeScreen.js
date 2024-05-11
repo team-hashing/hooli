@@ -228,8 +228,8 @@ const styles = StyleSheet.create({
     },
     starsIcon: {
         color: 'gold',
-        width: 25,
-        height: 25,
+        width: 20,
+        height: 20,
     },
     challengeHeader: {
         display: 'flex',

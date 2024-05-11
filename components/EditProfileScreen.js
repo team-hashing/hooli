@@ -3,8 +3,6 @@ import { StyleSheet, Alert } from 'react-native';
 import { Button, Layout, Avatar, Text, Input } from '@ui-kitten/components';
 import { handleUpdateProfile } from '../businessLogic/user/handleUpdateProfile';
 import { auth } from '../firebaseConfig';
-// import { launchImageLibrary } from 'react-native-image-picker';
-// import storage from '@react-native-firebase/storage';
 
 const EditProfileScreen = ({ navigation }) => {
   const user = auth.currentUser;

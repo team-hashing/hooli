@@ -5,6 +5,8 @@ import { auth } from "../../firebaseConfig";
 
 const getExperiences = async (userId) => {
     try {
+      console.log('userId', userId);
+      console.log('HOST', HOST);
       const response = await fetch(`http://${HOST}:3000/getExperiences`, {
         method: 'POST',
         headers: {

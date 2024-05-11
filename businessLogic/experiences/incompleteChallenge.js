@@ -5,6 +5,9 @@ import { auth } from "../../firebaseConfig";
 
 const incompleteChallenge = async (userId, experienceId, challengeId) => {
     try {
+        console.log('userId', userId);
+        console.log('experienceId', experienceId);
+        console.log('challengeId', challengeId);
         const response = await fetch(`http://${HOST}:3000/incompleteChallenge`, {
             method: 'POST',
             headers: {

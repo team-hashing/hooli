@@ -1,10 +1,12 @@
 
 const { generateContent } = require('./gemini-api');
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const port = 3000;
 const { v4: uuidv4 } = require('uuid');
 
+app.use(cors());
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
@@ -135,6 +137,8 @@ app.post('/generate', async (req, res) => {
     const text = req.body.text;
     const userId = req.body.userId;
 
+    console.log('Generating content for user:', userId)
+
     if (typeof text !== 'string' || text === '') {
         res.status(400).send('Invalid text');
         return;
@@ -220,6 +224,7 @@ app.post('/getExperiences', async (req, res) => {
 });
 
 app.post('/getExperiencesByDate', async (req, res) => {
+    console.log(req.body);
     const { userId, date } = req.body;
 
     const targetDate = date;
@@ -394,4 +399,41 @@ app.post('/getUserAttributes', async (req, res) => {
         console.error('Error getting user attributes:', error);
         res.status(500).send('Error getting user attributes');
     }
+});
+
+
+app.post('/generateDemo', async (req, res) => {
+    const text = req.body.text;
+
+    if (typeof text !== 'string' || text === '') {
+        res.status(400).send('Invalid text');
+        return;
+    }
+
+    const response = await generateContent(text);
+
+    // Add unique IDs to activities and future challenges
+    if (response.activities) {
+        response.activities = response.activities.map(activity => ({ id: uuidv4(), ...activity }));
+    }
+    if (response.future_challenges) {
+        response.future_challenges = response.future_challenges.map(challenge => ({ id: uuidv4(), isCompleted: false, ...challenge }));
+    }
+
+    // Calculate points from activities
+    let scores = {
+        transport: 0,
+        food: 0,
+        energy: 0,
+        waste: 0,
+        water: 0,
+        health: 0
+    };
+    if (!response.activities) {
+        response.activities = [];
+    } else {
+        scores = _calculatePoints(response.activities);
+    }
+
+    res.send(response);
 });

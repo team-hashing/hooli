@@ -4,14 +4,14 @@ import { Layout, Avatar, Divider, Text, Card, Icon } from '@ui-kitten/components
 import { auth } from '../firebaseConfig';
 import { useNavigation } from '@react-navigation/native';
 import { useFocusEffect } from '@react-navigation/native';
-import { View } from '@gluestack-ui/themed';
+import { View } from 'react-native';
 import getUserInfo from '../businessLogic/user/getUserInfo';
 import { TouchableOpacity, ScrollView } from 'react-native-gesture-handler';
 import Toast from 'react-native-toast-message';
 import { allMedals, medalDescriptions, medalNames, medalImages } from '../businessLogic/medalData';
 import { useTheme } from '@ui-kitten/components';
 import { Dimensions } from 'react-native';
-import { BarChart, ProgressChart } from 'react-native-chart-kit';
+import { BarChart } from 'react-native-chart-kit';
 
 
 const { width } = Dimensions.get('window');

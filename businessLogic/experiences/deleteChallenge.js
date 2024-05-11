@@ -3,6 +3,10 @@ import { HOST } from '@env';
 const deleteChallenge = (userId, experienceId, challengeId) => {
     let res = false;
 
+    console.log('userId', userId);
+    console.log('experienceId', experienceId);
+    console.log('challengeId', challengeId);
+
     fetch(`http://${HOST}:3000/deleteChallenge`, {
         method: 'POST',
         headers: {

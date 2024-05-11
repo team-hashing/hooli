@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Hooli",
-    "slug": "hooli",
+    "slug": "Hooli",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -32,20 +32,13 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      [
-        "@react-native-voice/voice",
-        {
-          "microphonePermission": "Allow Voice to Text Tutorial to access the microphone",
-          "speechRecognitionPermission": "Allow Voice to Text Tutorial to securely recognize user speech"
-        }
-      ]
+      "@react-native-voice/voice"
     ],
     "extra": {
       "eas": {
-        "projectId": "01cfb5fc-59f4-4450-bac6-1da4fe138e58"
+        "projectId": "3c26ce12-d4eb-4d48-8d31-b917489393f3"
       }
-    },
-    "owner": "danivs10"
+    }
   },
   "ios": {
     "supportsTablet": true,
