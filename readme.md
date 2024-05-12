@@ -1,4 +1,4 @@
-# Hooli - An Expo React Native Project
+# Hooli - An eco-friendly mobile app
 
 ![Hooli Logo](./assets/hooli.png)
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/team-hashing/hooli)
