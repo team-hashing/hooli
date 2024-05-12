@@ -10,10 +10,12 @@ function PromoWizard() {
       <h1 className="title">DOWNLOAD NOW!</h1>
       <h2 className="subtitle">Download the app to get started on your eco-friendly journey!</h2>
       <div className="promo-button-container">
+        <a href="/hooli.aab" download style={{textDecoration: 'none'}}>
         <div className="promo-button">
-          <p className="promo-text">Download .apk </p>
+          <p className="promo-text">Download .aab </p>
           <FontAwesomeIcon icon={faDownload} size='x' />
         </div>
+        </a>
       </div>
     </div>
   );
