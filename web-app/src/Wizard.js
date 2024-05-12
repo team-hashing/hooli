@@ -16,13 +16,13 @@ function Wizard({ inputText }) {
     console.log(inputText);
 
   useEffect(() => {
+    console.log(`Open wizard screen`)
     const fetchData = async () => {
 
+      console.log(`Calling the API`)
       console.log(`${process.env.REACT_APP_HOST}`)
 
-
-
-      const response = await fetch(`http://${process.env.REACT_APP_HOST}:3000/generateDemo`, {
+      const response = await fetch(`${process.env.REACT_APP_HOST}/generateDemo`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
