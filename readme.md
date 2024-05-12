@@ -1,7 +1,6 @@
 # Hooli - An Expo React Native Project
 
 ![Hooli Logo](./assets/hooli.png)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/team-hashing/hooli)
 ![GitHub All Releases](https://img.shields.io/github/downloads/team-hashing/hooli/total)
 ![GitHub last commit](https://img.shields.io/github/last-commit/team-hashing/hooli)
@@ -21,6 +20,11 @@
 Hooli is a mobile application designed to promote eco-friendly habits among its users. It is built using React Native and Expo, two powerful tools that allow for the development of native mobile applications using JavaScript and React.
 
 The application is structured to separate the UI components from the business logic. This separation of concerns makes the codebase easier to maintain and extend, as changes to the UI do not affect the underlying business logic and vice versa.
+
+Video of the project [here](https://www.youtube.com/watch?v=4azPGzbJKRg)
+
+## new update: web demo
+We added a new web demo to try part of the app from web.This was made in react and only shows a small part of what the mobile app is capable of. Demo is on Github Pages, link [here](https://team-hashing.github.io/hooli/).
 
 ## Features
 
@@ -109,3 +113,4 @@ Please note that you may need to adjust some configurations in the code to suit 
 - [Guillermo Martín-Coello Juárez](https://github.com/Gmarcoel)
 
 - [Project Repository](https://github.com/team-hashing/hooli)
+- [Video of the project](https://www.youtube.com/watch?v=4azPGzbJKRg)
