@@ -1,0 +1,44 @@
+.wizard-container {
+    background-color: var(--color6);
+    transition: all 1s ease-in;
+}
+
+
+.page {
+    position:sticky;
+    display: block;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+}
+
+.down-arrow {
+    position: fixed;
+    bottom: 50px;
+    left: 50%;
+    z-index: 1000;
+    color: var(--color2);
+    animation: bounce 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  .close-button {
+    /*style={{ position: 'fixed', top: 0, right: 0, zIndex: 1000 }}*/
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+    color: var(--color2);
+    padding: 20px;
+    cursor: pointer;
+
+  }

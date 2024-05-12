@@ -1,0 +1,79 @@
+.App {
+  text-align: center;
+}
+
+:root {
+  --white: #fff;
+  --background: #cfdece;
+  --color1: #5ADD33;
+  --color2: #ECFBCA;
+  --color3: #D9FFCA;
+  --color4: #7FA074;
+  --color5: #4E6146;
+  --color6: #46583F;
+  --red: #ff6868;
+  --green: #88ff88;
+  --gold: #FFD700;
+}
+
+/* General body styles */
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  height: 100%;
+  font-family: Arial, sans-serif;
+  background-color: var(--background);
+  color: var(--color5);
+}
+
+/* Header styles */
+header {
+  background-color: var(--color1);
+  color: white;
+  text-align: center;
+}
+
+/* Button styles */
+button {
+  background-color: var(--color5);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: var(--color1);
+}
+
+/* Input field styles */
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--color4);
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+  background-color: var(--white);
+  color: var(--color6);
+}
+
+/* Styles for containers */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.hooli {
+  font-family: "Hammersmith One", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}

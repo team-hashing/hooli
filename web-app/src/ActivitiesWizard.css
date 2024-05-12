@@ -1,0 +1,90 @@
+.activities-wizard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10%;
+    text-align: center;
+    display: block;
+    position: sticky;
+
+  }
+  
+  .activities-wizard .title {
+    font-size: 2.8em;
+    margin-bottom: 20px;
+  }
+
+
+  .activities-wizard .subtitle {
+    font-size: 1em;
+    margin-bottom: 20px;
+    color: var(--color4);
+  }
+
+  .activities-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    margin-top: 20px;
+  }
+
+  .activity {  
+    position: relative;
+    background-color: var(--color6);
+    color: var(--color3);
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 500ms;
+    max-width: 300px;
+    border: 1px solid var(--color3);
+  }
+
+
+    .activity:hover {
+        background-color: var(--color3);
+        color: var(--color6);
+    }
+
+    .activity-header {
+        font-size: 1em;
+        margin-bottom: 10px;
+    }
+
+    .activity-message {
+        font-size: 0.5em;
+        margin-bottom: 10px;
+    }
+
+    .activity-feedback {
+        font-size: 0.5em;
+        margin-bottom: 10px;
+    }
+
+    .activity-score {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, -100%);
+        top: 0;
+        font-size: 0.5em;
+        margin-bottom: 10px;
+        border-radius: 20px;
+        width: fit-content;
+        padding: 10px;
+    }
+
+
+    .positive {
+        background-color: var(--green);
+        color: var(--color5);
+    }
+
+    .negative {
+        background-color: var(--red);
+    }
+    

@@ -1,0 +1,14 @@
+/* LanguageSelector.css */
+.language-selector {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  .language-selector select {
+    border-radius: 20;
+    padding: 10px;
+    border: none;
+    background: white;
+    font-size: 20px;
+  }
