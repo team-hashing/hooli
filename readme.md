@@ -1,5 +1,23 @@
 # Hooli - An Expo React Native Project
 
+![Hooli Logo](./assets/hooli.png)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![GitHub package.json version](https://img.shields.io/github/package-json/v/team-hashing/hooli)
+![GitHub All Releases](https://img.shields.io/github/downloads/team-hashing/hooli/total)
+![GitHub last commit](https://img.shields.io/github/last-commit/team-hashing/hooli)
+![GitHub issues](https://img.shields.io/github/issues-raw/team-hashing/hooli)
+![GitHub closed issues](https://img.shields.io/github/issues-closed-raw/team-hashing/hooli)
+![GitHub pull requests](https://img.shields.io/github/issues-pr-raw/team-hashing/hooli)
+![GitHub contributors](https://img.shields.io/github/contributors/team-hashing/hooli)
+![GitHub language count](https://img.shields.io/github/languages/count/team-hashing/hooli)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/team-hashing/hooli)
+![GitHub repo size](https://img.shields.io/github/repo-size/team-hashing/hooli)
+![GitHub top language](https://img.shields.io/github/languages/top/team-hashing/hooli)
+
+![GitHub Repo stars](https://img.shields.io/github/stars/team-hashing/hooli?style=social)
+![GitHub forks](https://img.shields.io/github/forks/team-hashing/hooli?style=social)
+![GitHub watchers](https://img.shields.io/github/watchers/team-hashing/hooli?style=social)
+
 Hooli is a mobile application designed to promote eco-friendly habits among its users. It is built using React Native and Expo, two powerful tools that allow for the development of native mobile applications using JavaScript and React.
 
 The application is structured to separate the UI components from the business logic. This separation of concerns makes the codebase easier to maintain and extend, as changes to the UI do not affect the underlying business logic and vice versa.
