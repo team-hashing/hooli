@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/hooli/static/css/main.17cb576c.css",
-    "main.js": "/hooli/static/js/main.ac5b242f.js",
+    "main.js": "/hooli/static/js/main.909e9f4b.js",
     "static/js/453.1965c8d6.chunk.js": "/hooli/static/js/453.1965c8d6.chunk.js",
     "index.html": "/hooli/index.html",
     "main.17cb576c.css.map": "/hooli/static/css/main.17cb576c.css.map",
-    "main.ac5b242f.js.map": "/hooli/static/js/main.ac5b242f.js.map",
+    "main.909e9f4b.js.map": "/hooli/static/js/main.909e9f4b.js.map",
     "453.1965c8d6.chunk.js.map": "/hooli/static/js/453.1965c8d6.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.17cb576c.css",
-    "static/js/main.ac5b242f.js"
+    "static/js/main.909e9f4b.js"
   ]
 }
